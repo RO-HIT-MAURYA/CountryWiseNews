@@ -1,9 +1,12 @@
 package rohit.maurya.countrywisenews;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.gson.JsonObject;
 
@@ -37,7 +40,6 @@ public class MainActivity extends AppCompatActivity
                 {
                     List<JsonObject> list =  response.body().getList();
                     Log.e("responseIs",list+"");
-
                 }
             }
 
@@ -46,5 +48,36 @@ public class MainActivity extends AppCompatActivity
                 Log.e("errorIs",t.getMessage());
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu,menu);
+
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+    {
+        int i = item.getItemId();
+        if (i == R.id.day_night)
+        {
+            String string = item.getTitle().toString();
+            if (string.equalsIgnoreCase("day mode"))
+            {
+                item.setTitle("Night Mode");
+                setTheme(android.R.style.Theme_Light);
+            }
+            else
+            {
+                item.setTitle("day mode");
+                setTheme(android.R.style.ThemeOverlay_Material_Dark);
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
