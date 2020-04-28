@@ -1,23 +1,20 @@
-package rohit.maurya.countrywisenews;
+package rohit.maurya.countrywisenews.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
+import rohit.maurya.countrywisenews.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("");
         setContentView(R.layout.activity_splash_screen);
 
        /* Dexter.withActivity(this)
@@ -33,5 +30,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         String country = getApplicationContext().getResources().getConfiguration().locale.getDisplayCountry();
         Log.e("countryIs",country);
 
+        new Handler().postDelayed(() -> {
+            startActivity(new Intent(SplashScreenActivity.this, BaseActivity.class));
+            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+            finish();
+        },1230);
     }
 }

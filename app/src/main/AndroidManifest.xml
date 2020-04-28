@@ -13,15 +13,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyDarkToolbarStyle">
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".SplashScreenActivity"
-            android:theme="@style/AppTheme">
+
+        <activity android:name=".activity.BaseActivity"
+            android:theme="@style/DarkTheme"/>
+
+        <activity android:name=".activity.SplashScreenActivity"
+            android:theme="@style/DarkTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

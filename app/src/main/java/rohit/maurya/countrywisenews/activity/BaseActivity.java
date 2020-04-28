@@ -1,4 +1,4 @@
-package rohit.maurya.countrywisenews;
+package rohit.maurya.countrywisenews.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,14 +15,18 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rohit.maurya.countrywisenews.ApiInterface;
+import rohit.maurya.countrywisenews.App;
+import rohit.maurya.countrywisenews.News;
+import rohit.maurya.countrywisenews.R;
 
-public class MainActivity extends AppCompatActivity
+public class BaseActivity extends AppCompatActivity
 {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_base);
 
         getNews();
     }
