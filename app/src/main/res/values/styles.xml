@@ -12,7 +12,7 @@
         <item name="android:background">@android:color/white</item>
     </style>
 
-    <style name="MyDarkToolbarStyle" parent="ThemeOverlay.AppCompat.Light">
+    <!--<style name="MyDarkToolbarStyle" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:colorBackground">@android:color/black</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
@@ -20,6 +20,6 @@
     <style name="DarkTheme" parent="Theme.AppCompat">
         <item name="colorPrimary">@android:color/black</item>
         <item name="android:colorBackground">@android:color/black</item>
-    </style>
+    </style>-->
 
 </resources>

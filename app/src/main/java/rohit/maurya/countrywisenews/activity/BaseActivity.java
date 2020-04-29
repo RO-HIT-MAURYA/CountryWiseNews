@@ -2,11 +2,15 @@ package rohit.maurya.countrywisenews.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.databinding.DataBindingUtil;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.gson.JsonObject;
 
@@ -19,16 +23,33 @@ import rohit.maurya.countrywisenews.ApiInterface;
 import rohit.maurya.countrywisenews.App;
 import rohit.maurya.countrywisenews.News;
 import rohit.maurya.countrywisenews.R;
+import rohit.maurya.countrywisenews.databinding.ActivityBaseBinding;
 
 public class BaseActivity extends AppCompatActivity
 {
+    ActivityBaseBinding activityBaseBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
+
+        activityBaseBinding = DataBindingUtil.setContentView(this,R.layout.activity_base);
+
+        activityBaseBinding.button.setOnClickListener(this::onClick);
+        activityBaseBinding.btn.setOnClickListener(this::onClick);
+
 
         getNews();
+    }
+
+    private void onClick(View view) {
+        if (view == activityBaseBinding.button)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        else
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+        startActivity(new Intent(this,BaseActivity.class));
+        finish();
     }
 
     private void getNews()
