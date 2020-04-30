@@ -16,7 +16,7 @@ public class CategoryFragment extends Fragment
     private View view;
     private Context context;
 
-    public static CategoryFragment newInstance(String param1, String param2) {
+    public static CategoryFragment newInstance() {
         CategoryFragment fragment = new CategoryFragment();
         Bundle args = new Bundle();
 

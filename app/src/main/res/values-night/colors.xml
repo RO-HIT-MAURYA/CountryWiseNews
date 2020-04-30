@@ -3,4 +3,18 @@
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#000000</color>
+
+    <color name="colorLine">#464646</color>
+    <color name="colorBack">#FAFAFA</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+
+    <color name="grey1">#3C3F41</color>
+    <color name="grey2">#313335</color>
+    <color name="grey3">#232323</color>
+    <color name="grey4">#2B2B2B</color>
+    <color name="grey5">#B2B2B2</color>
+    <color name="grey6">#646464</color>
+
 </resources>
