@@ -3,6 +3,7 @@ package rohit.maurya.countrywisenews;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class News
@@ -29,15 +30,15 @@ public class News
     private String content;
 
     @SerializedName("articles")
-    private List<JsonObject> list;
+    private ArrayList<JsonObject> arrayList;
 
-    public List<JsonObject> getList()
+    public ArrayList<JsonObject> getList()
     {
-        return list;
+        return arrayList;
     }
 
-    public void setList(List<JsonObject> list) {
-        this.list = list;
+    public void setList(ArrayList<JsonObject> list) {
+        this.arrayList = list;
     }
 
     public String getAutohor() {

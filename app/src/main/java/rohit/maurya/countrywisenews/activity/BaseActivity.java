@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -32,26 +33,41 @@ import rohit.maurya.countrywisenews.fragment.CategoryFragment;
 import rohit.maurya.countrywisenews.fragment.HomeFragment;
 import rohit.maurya.countrywisenews.fragment.SettingFragment;
 
-public class BaseActivity extends AppCompatActivity
-{
+public class BaseActivity extends AppCompatActivity {
     private ActivityBaseBinding activityBaseBinding;
     private HomeFragment homeFragment;
     private CategoryFragment categoryFragment;
     private SettingFragment settingFragment;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityBaseBinding = DataBindingUtil.setContentView(this,R.layout.activity_base);
+        activityBaseBinding = DataBindingUtil.setContentView(this, R.layout.activity_base);
 
-        getNews();
+        fragmentManager = getSupportFragmentManager();
+
+        homeFragment = HomeFragment.newInstance();
+        fragmentLoader(homeFragment);
     }
 
-    public void fragmentLoader(Fragment fragment)
-    {
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.anim_enter, R.anim.anim_exit)
+    public void fragmentLoader(Fragment fragment) {
+        fragmentManager.beginTransaction().setCustomAnimations(R.anim.anim_enter, R.anim.anim_exit)
+                .addToBackStack("")
                 .replace(R.id.frameLayout, fragment).commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (homeFragment.isVisible())
+            finish();
+        else if (categoryFragment != null && categoryFragment.isVisible())
+            decideBottomSelection(activityBaseBinding.homeLayout);
+        else if (settingFragment !=null && settingFragment.isVisible())
+            decideBottomSelection(activityBaseBinding.categoryLayout);
+
+        fragmentManager.popBackStack();
     }
 
     /*private void onClick(View view) {
@@ -64,53 +80,23 @@ public class BaseActivity extends AppCompatActivity
         finish();
     }*/
 
-    private void getNews()
-    {
-        ApiInterface apiInterface = App.createService(ApiInterface.class);
-
-        Call<News> call = apiInterface.getNews();
-        call.enqueue(new Callback<News>() {
-            @Override
-            public void onResponse(Call<News> call, Response<News> response)
-            {
-                if (response.isSuccessful())
-                {
-                    List<JsonObject> list =  response.body().getList();
-                    Log.e("responseIs",list+"");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<News> call, Throwable t) {
-                Log.e("errorIs",t.getMessage());
-            }
-        });
-    }
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.menu,menu);
-
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
 
 
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item)
-    {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int i = item.getItemId();
-        if (i == R.id.day_night)
-        {
+        if (i == R.id.day_night) {
             String string = item.getTitle().toString();
-            if (string.equalsIgnoreCase("day mode"))
-            {
+            if (string.equalsIgnoreCase("day mode")) {
                 item.setTitle("Night Mode");
                 setTheme(android.R.style.Theme_Light);
-            }
-            else
-            {
+            } else {
                 item.setTitle("day mode");
                 setTheme(android.R.style.ThemeOverlay_Material_Dark);
             }
@@ -120,34 +106,43 @@ public class BaseActivity extends AppCompatActivity
 
     public void onBottomBarClick(View view)
     {
+        if (homeFragment.isVisible() && view == activityBaseBinding.homeLayout)
+            return;
+        else if (categoryFragment != null && categoryFragment.isVisible() && view == activityBaseBinding.categoryLayout)
+            return;
+        else if (settingFragment != null && settingFragment.isAdded() && view == activityBaseBinding.settingLayout)
+            return;
 
         if (view == activityBaseBinding.homeLayout)
-        {
-            activityBaseBinding.homeImage.setColorFilter(getResources().getColor(R.color.colorBlack));
-            activityBaseBinding.categoryImage.setColorFilter(getResources().getColor(R.color.grey5));
-            activityBaseBinding.settingImage.setColorFilter(getResources().getColor(R.color.grey5));
-
             fragmentLoader(homeFragment);
-        }
-        else if (view == activityBaseBinding.categoryLayout)
-        {
-            activityBaseBinding.homeImage.setColorFilter(getResources().getColor(R.color.grey5));
-            activityBaseBinding.categoryImage.setColorFilter(getResources().getColor(R.color.colorBlack));
-            activityBaseBinding.settingImage.setColorFilter(getResources().getColor(R.color.grey5));
-
+        else if (view == activityBaseBinding.categoryLayout) {
             if (categoryFragment == null)
                 categoryFragment = CategoryFragment.newInstance();
             fragmentLoader(categoryFragment);
-        }
-        else
-        {
-            activityBaseBinding.homeImage.setColorFilter(getResources().getColor(R.color.grey5));
-            activityBaseBinding.categoryImage.setColorFilter(getResources().getColor(R.color.grey5));
-            activityBaseBinding.settingImage.setColorFilter(getResources().getColor(R.color.colorBlack));
-
+        } else {
             if (settingFragment == null)
                 settingFragment = SettingFragment.newInstance();
             fragmentLoader(settingFragment);
         }
+
+        decideBottomSelection(view);
+    }
+
+    private void decideBottomSelection(View view) {
+        if (view == activityBaseBinding.homeLayout) {
+            activityBaseBinding.homeImage.setColorFilter(getResources().getColor(R.color.colorBlack));
+            activityBaseBinding.categoryImage.setColorFilter(getResources().getColor(R.color.grey5));
+            activityBaseBinding.settingImage.setColorFilter(getResources().getColor(R.color.grey5));
+        } else if (view == activityBaseBinding.categoryLayout) {
+            activityBaseBinding.homeImage.setColorFilter(getResources().getColor(R.color.grey5));
+            activityBaseBinding.categoryImage.setColorFilter(getResources().getColor(R.color.colorBlack));
+            activityBaseBinding.settingImage.setColorFilter(getResources().getColor(R.color.grey5));
+        } else {
+            activityBaseBinding.homeImage.setColorFilter(getResources().getColor(R.color.grey5));
+            activityBaseBinding.categoryImage.setColorFilter(getResources().getColor(R.color.grey5));
+            activityBaseBinding.settingImage.setColorFilter(getResources().getColor(R.color.colorBlack));
+        }
+
+        Log.e("conditionIs","executed");
     }
 }

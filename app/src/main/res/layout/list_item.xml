@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dayTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="9dp"
+        android:text="a day ago"
+        android:textColor="@color/grey5"
+        android:fontFamily="sans-serif"
+        android:textStyle="italic"
+        android:layout_gravity="end"/>
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey4"
+        android:layout_margin="9dp"
+        android:text="title"
+        android:fontFamily="sans-serif-condensed" />
+
+    <TextView
+        android:id="@+id/authorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/grey6"
+        android:fontFamily="sans-serif-condensed-light"
+        android:layout_margin="9dp"
+        android:layout_gravity="end"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.4dp"
+        android:background="@color/colorBlack"/>
+
+</LinearLayout>
