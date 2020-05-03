@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -39,11 +40,14 @@ public class BaseActivity extends AppCompatActivity {
     private CategoryFragment categoryFragment;
     private SettingFragment settingFragment;
     private FragmentManager fragmentManager;
+    public  Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityBaseBinding = DataBindingUtil.setContentView(this, R.layout.activity_base);
+
+        context = this;
 
         fragmentManager = getSupportFragmentManager();
 
@@ -104,8 +108,7 @@ public class BaseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onBottomBarClick(View view)
-    {
+    public void onBottomBarClick(View view) {
         if (homeFragment.isVisible() && view == activityBaseBinding.homeLayout)
             return;
         else if (categoryFragment != null && categoryFragment.isVisible() && view == activityBaseBinding.categoryLayout)

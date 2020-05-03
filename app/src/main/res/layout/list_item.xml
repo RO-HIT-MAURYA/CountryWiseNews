@@ -2,7 +2,8 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/grey5"
     android:orientation="vertical">
 
     <TextView
@@ -11,27 +12,28 @@
         android:layout_height="wrap_content"
         android:layout_margin="9dp"
         android:text="a day ago"
-        android:textColor="@color/grey5"
-        android:fontFamily="sans-serif"
-        android:textStyle="italic"
-        android:layout_gravity="end"/>
+        android:textColor="@color/grey2"
+        android:fontFamily="casual"
+        android:textStyle="italic" />
 
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/grey4"
+        android:textColor="@color/grey3"
         android:layout_margin="9dp"
-        android:text="title"
-        android:fontFamily="sans-serif-condensed" />
+        android:text="News Title"
+        android:fontFamily="monospace"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/authorTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="@color/grey6"
-        android:fontFamily="sans-serif-condensed-light"
+        android:text="author name"
+        android:textColor="@color/grey4"
+        android:fontFamily="sans-serif"
+        android:textStyle="italic"
         android:layout_margin="9dp"
         android:layout_gravity="end"/>
 

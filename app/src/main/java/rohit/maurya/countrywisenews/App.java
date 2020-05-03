@@ -1,6 +1,7 @@
 package rohit.maurya.countrywisenews;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,6 +20,7 @@ public class App extends Application
     private static HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
     private static OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor);
     private static OkHttpClient okHttpClient = okHttpClientBuilder.build();
+
 
     public static <T> T createService(Class<T> serviceClass){
         if(retrofit == null){
