@@ -1,7 +1,6 @@
 package rohit.maurya.countrywisenews.adapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -12,17 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
-
-import rohit.maurya.countrywisenews.App;
 import rohit.maurya.countrywisenews.R;
 import rohit.maurya.countrywisenews.activity.BaseActivity;
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.InnerClass> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.InnerClass> {
     private JsonArray jsonArray = new JsonArray();
     private Context context;
 
-    public ListAdapter(Context context, JsonArray jsonArray) {
+    public RecyclerViewAdapter(Context context, JsonArray jsonArray) {
         this.context = context;
         this.jsonArray = jsonArray;
     }
@@ -31,12 +27,20 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.InnerClass> {
     @Override
     public InnerClass onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = ((BaseActivity) context).getLayoutInflater().inflate(R.layout.list_item, parent, false);
-        return new ListAdapter.InnerClass(view);
+        return new RecyclerViewAdapter.InnerClass(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull InnerClass holder, int position) {
+
+        if (jsonArray == null)
+            return;
+
         JsonObject jsonObject = (JsonObject) jsonArray.get(position);
+
+        if (jsonObject == null)
+            return;
+
         holder.dayTextView.setText(jsonObject.get("publishedAt") + "");
         holder.titleTextView.setText(jsonObject.get("title") + "");
 
