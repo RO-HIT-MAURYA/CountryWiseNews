@@ -1,6 +1,9 @@
 package rohit.maurya.countrywisenews.fragment;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,14 +12,19 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.BaseAdapter;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.JsonArray;
+import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -36,13 +44,14 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
     private View view;
     private Context context;
     private FragmentCategoryBinding fragmentCategoryBinding;
-    private String categoryName = "";
-    private JsonArray businessArray = new JsonArray();
-    private JsonArray entertainmentArray = new JsonArray();
-    private JsonArray healthArray = new JsonArray();
-    private JsonArray scienceArray = new JsonArray();
-    private JsonArray sportsArray = new JsonArray();
-    private JsonArray technologyArray = new JsonArray();
+    private JsonArray businessArray;//= new JsonArray();
+    private JsonArray entertainmentArray;// = new JsonArray();
+    private JsonArray healthArray;// = new JsonArray();
+    private JsonArray scienceArray;// = new JsonArray();
+    private JsonArray sportsArray;// = new JsonArray();
+    private JsonArray technologyArray;// = new JsonArray();
+    private RecyclerViewAdapter businessAdapter, entertainmentAdapter, healthAdapter, scienceAdapter, sportsAdapter, technologyAdapter;
+    private Dialog dialog;
 
     public static CategoryFragment newInstance() {
         CategoryFragment fragment = new CategoryFragment();
@@ -60,7 +69,26 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
             fragmentCategoryBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false);
             context = getContext();
 
-            setTabLayoutData();
+            /*RotateLoading rotateLoading = new RotateLoading(context);
+            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT,WindowManager.LayoutParams.WRAP_CONTENT);
+            layoutParams.height = 50;
+            layoutParams.width = 50;
+            rotateLoading.setLayoutParams(layoutParams);
+            rotateLoading.start();*/
+
+            View view = getLayoutInflater().inflate(R.layout.loader_layout,null,false);
+            RotateLoading rotateLoading = view.findViewById(R.id.rotateLoading);
+            rotateLoading.start();
+
+            dialog = new Dialog(context);
+            dialog.getWindow().setGravity(Gravity.CENTER);
+            dialog.setContentView(view);
+            Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.argb(50, 0, 0, 0)));
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            dialog.show();
+
+            initializeArray();
+
         }
         return fragmentCategoryBinding.getRoot();
     }
@@ -74,99 +102,61 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
         arrayList.add("Sports");
         arrayList.add("Technology");
 
-        for (String string : arrayList) {
+        for (int i=0; i<arrayList.size(); i++) {
             TabLayout.Tab tab = fragmentCategoryBinding.tabLayout.newTab();
-            tab.setTag(string);
-            tab.setText(string);
+            tab.setText(arrayList.get(i));
+            tab.setTag(i);
             fragmentCategoryBinding.tabLayout.addTab(tab);
             fragmentCategoryBinding.tabLayout.addOnTabSelectedListener(this);
         }
 
-        onTabSelected(Objects.requireNonNull(fragmentCategoryBinding.tabLayout.getTabAt(0)));
-
-        fragmentCategoryBinding.viewPager.setAdapter(new ViewPagerAdapter());
+        //fragmentCategoryBinding.tabLayout.setupWithViewPager(fragmentCategoryBinding.viewPager);
         fragmentCategoryBinding.viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(fragmentCategoryBinding.tabLayout));
     }
 
-    private void decideCategory() {
+    private void initializeArray() {
         ApiInterface apiInterface = App.createService(ApiInterface.class);
         Call<News> call;
 
-        if (categoryName.equalsIgnoreCase("business"))
-        {
-            if (businessArray.size() == 0) {
-                call = apiInterface.getBusinessNews();
-                loadData(call, jsonArray -> {
-                    businessArray = jsonArray;
-                    Log.e("businessArrayIs", businessArray + "");
-
-                });
-            }
-            else
-            {
-
-            }
-        } else if (categoryName.equalsIgnoreCase("entertainment"))
-        {
-            if (entertainmentArray.size() == 0) {
-                call = apiInterface.getEntertainmentNews();
-                loadData(call, jsonArray -> {
-                    entertainmentArray = jsonArray;
-                    Log.e("entertainmentArrayIs", entertainmentArray + "");
-                });
-            }
-            else
-            {
-
-            }
-        } else if (categoryName.equalsIgnoreCase("health")) {
-            if (healthArray.size() == 0) {
-                call = apiInterface.getHealthNews();
-                loadData(call, jsonArray -> {
-                    healthArray = jsonArray;
-                    Log.e("healthArrayIs", healthArray + "");
-                });
-            }
-            else
-            {
-
-            }
-        } else if (categoryName.equalsIgnoreCase("science")) {
-            if (scienceArray.size() == 0) {
-                call = apiInterface.getScienceNews();
-                loadData(call, jsonArray -> {
-                    scienceArray = jsonArray;
-                    Log.e("scienceArrayIs", scienceArray + "");
-                });
-            }
-            else
-            {
-
-            }
-        } else if (categoryName.equalsIgnoreCase("sports")) {
-            if (sportsArray.size() == 0) {
-                call = apiInterface.getSportsNews();
-                loadData(call, jsonArray -> {
-                    sportsArray = jsonArray;
-                    Log.e("sportsArrayIs", sportsArray + "");
-                });
-            }
-            else
-            {
-
-            }
-        } else {
-            if (technologyArray.size() == 0) {
-                call = apiInterface.getTechnologyNews();
-                loadData(call, jsonArray -> {
-                    technologyArray = jsonArray;
-                    Log.e("technologyArrayArrayIs", technologyArray + "");
-                });
-            }
-            else
-            {
-
-            }
+        if (businessArray == null) {
+            call = apiInterface.getBusinessNews();
+            loadData(call, jsonArray -> {
+                businessArray = jsonArray;
+                businessAdapter = new RecyclerViewAdapter(context,businessArray);
+            });
+        } else if (entertainmentArray == null) {
+            call = apiInterface.getEntertainmentNews();
+            loadData(call, jsonArray -> {
+                entertainmentArray = jsonArray;
+                entertainmentAdapter = new RecyclerViewAdapter(context,entertainmentArray);
+            });
+        } else if (healthArray == null) {
+            call = apiInterface.getHealthNews();
+            loadData(call, jsonArray -> {
+                healthArray = jsonArray;
+                healthAdapter = new RecyclerViewAdapter(context,healthArray);
+            });
+        } else if (scienceArray == null) {
+            call = apiInterface.getScienceNews();
+            loadData(call, jsonArray -> {
+                scienceArray = jsonArray;
+                scienceAdapter = new RecyclerViewAdapter(context,scienceArray);
+            });
+        } else if (sportsArray == null) {
+            call = apiInterface.getSportsNews();
+            loadData(call, jsonArray -> {
+                sportsArray = jsonArray;
+                sportsAdapter = new RecyclerViewAdapter(context,sportsArray);
+            });
+        } else if (technologyArray == null) {
+            call = apiInterface.getTechnologyNews();
+            loadData(call, jsonArray -> {
+                technologyArray = jsonArray;
+                technologyAdapter = new RecyclerViewAdapter(context,technologyArray);
+                dialog.hide();
+                setTabLayoutData();
+                fragmentCategoryBinding.viewPager.setAdapter(new ViewPagerAdapter());
+            });
         }
     }
 
@@ -178,25 +168,31 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
                     assert response.body() != null;
                     //ArrayList<JsonObject> arrayList = response.body().getList();
                     JsonArray jsonArray = response.body().getJsonArray();
-                    callBack.response(jsonArray);
-                    //Log.e("tempJsonArray", jsonArray + "");
+
+                    if (jsonArray == null)
+                        callBack.response(new JsonArray());
+                    else
+                        callBack.response(jsonArray);
+
+                    initializeArray();
+
+                    Log.e("responseIs", jsonArray + "");
                 }
             }
 
             @Override
             public void onFailure(Call<News> call, Throwable t) {
                 Log.e("errorIs", t.getMessage());
+                callBack.response(new JsonArray());
+                initializeArray();
             }
         });
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        Object object = tab.getTag();
-        if (object != null) {
-            categoryName = object.toString();
-            decideCategory();
-        }
+        if (tab.getTag() instanceof Integer)
+            fragmentCategoryBinding.viewPager.setCurrentItem((int)tab.getTag());
     }
 
     @Override
@@ -213,8 +209,7 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
         void response(JsonArray jsonArray);
     }
 
-    private class ViewPagerAdapter extends PagerAdapter
-    {
+    private class ViewPagerAdapter extends PagerAdapter {
         @Override
         public int getCount() {
             return 6;
@@ -227,29 +222,30 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
 
         @NonNull
         @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position)
-        {
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
             //return super.instantiateItem(container, position);
 
-            View view = ((BaseActivity)context).getLayoutInflater().inflate(R.layout.recycler_view,container,false);
+            View view = ((BaseActivity) context).getLayoutInflater().inflate(R.layout.recycler_view, container, false);
             RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(linearLayoutManager);
-            RecyclerViewAdapter recyclerViewAdapter;
-            if (position == 0)
-                recyclerViewAdapter = new RecyclerViewAdapter(context,businessArray);
-            else if (position == 1)
-                recyclerViewAdapter = new RecyclerViewAdapter(context,entertainmentArray);
-            else if (position == 2)
-                recyclerViewAdapter = new RecyclerViewAdapter(context,healthArray);
-            else if (position == 3)
-                recyclerViewAdapter = new RecyclerViewAdapter(context,scienceArray);
-            else if (position == 4)
-                recyclerViewAdapter = new RecyclerViewAdapter(context,sportsArray);
-            else
-                recyclerViewAdapter = new RecyclerViewAdapter(context,technologyArray);
 
-            recyclerView.setAdapter(recyclerViewAdapter);
+            if (position == 0)
+                recyclerView.setAdapter(businessAdapter);
+            else if (position == 1)
+                recyclerView.setAdapter(entertainmentAdapter);
+            else if (position == 2)
+                recyclerView.setAdapter(healthAdapter);
+            else if (position == 3)
+                recyclerView.setAdapter(scienceAdapter);
+            else if (position == 4)
+                recyclerView.setAdapter(sportsAdapter);
+            else
+                recyclerView.setAdapter(technologyAdapter);
+
+            container.addView(view);
+
+            Log.e("pagerIs", "invoked");
 
             return view;
         }
@@ -258,7 +254,7 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
         public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             //super.destroyItem(container, position, object);
 
-            container.removeView((View)object);
+            container.removeView((View) object);
         }
     }
 }
