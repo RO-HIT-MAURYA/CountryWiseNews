@@ -12,15 +12,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.BaseAdapter;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.JsonArray;
@@ -68,13 +65,6 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
         if (fragmentCategoryBinding == null) {
             fragmentCategoryBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false);
             context = getContext();
-
-            /*RotateLoading rotateLoading = new RotateLoading(context);
-            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT,WindowManager.LayoutParams.WRAP_CONTENT);
-            layoutParams.height = 50;
-            layoutParams.width = 50;
-            rotateLoading.setLayoutParams(layoutParams);
-            rotateLoading.start();*/
 
             View view = getLayoutInflater().inflate(R.layout.loader_layout,null,false);
             RotateLoading rotateLoading = view.findViewById(R.id.rotateLoading);
@@ -153,6 +143,7 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
             loadData(call, jsonArray -> {
                 technologyArray = jsonArray;
                 technologyAdapter = new RecyclerViewAdapter(context,technologyArray);
+                ((RotateLoading)dialog.findViewById(R.id.rotateLoading)).stop();
                 dialog.hide();
                 setTabLayoutData();
                 fragmentCategoryBinding.viewPager.setAdapter(new ViewPagerAdapter());

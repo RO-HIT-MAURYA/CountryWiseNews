@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import rohit.maurya.countrywisenews.App;
 import rohit.maurya.countrywisenews.R;
 import rohit.maurya.countrywisenews.activity.BaseActivity;
 
@@ -41,7 +42,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (jsonObject == null)
             return;
 
-        holder.dayTextView.setText(jsonObject.get("publishedAt") + "");
+        holder.dayTextView.setText(App.getDifference(jsonObject.get("publishedAt")+""));
+        //holder.dayTextView.setText(jsonObject.get("publishedAt")+"");
         holder.titleTextView.setText(jsonObject.get("title") + "");
 
         String string = jsonObject.get("author") + "";

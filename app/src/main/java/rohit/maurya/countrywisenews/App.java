@@ -1,10 +1,15 @@
 package rohit.maurya.countrywisenews;
 
 import android.app.Application;
-import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -31,5 +36,40 @@ public class App extends Application
                     .build();
         }
         return retrofit.create(serviceClass);
+    }
+
+    public static String getDifference(String string)
+    {
+        //Log.e("stringIs",string);
+        string = string.replace("T"," ");
+        string = string.replace("Z","");
+        string = string.replace("\"","");
+
+        Log.e("stringIs",string);
+        //2020-05-06 12:28:46
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date date = simpleDateFormat.parse(string);
+            long l = System.currentTimeMillis() - date.getTime();
+
+            int i = (int)TimeUnit.MILLISECONDS.toDays(l);
+            if (i > 0)
+                return i+" day ago";
+
+            i = (int)TimeUnit.MILLISECONDS.toHours(l);
+            if (i > 0)
+                return i+" hr ago";
+
+            i = (int)TimeUnit.MILLISECONDS.toMinutes(l);
+            if (i > 0)
+                return i+" min ago";
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e("exceptionIs",e.toString());
+        }
+
+        return  "";
     }
 }
