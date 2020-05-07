@@ -1,6 +1,7 @@
 package rohit.maurya.countrywisenews.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import rohit.maurya.countrywisenews.App;
+import rohit.maurya.countrywisenews.NewsDetailActivity;
 import rohit.maurya.countrywisenews.R;
 import rohit.maurya.countrywisenews.activity.BaseActivity;
 
@@ -42,6 +44,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (jsonObject == null)
             return;
 
+        //holder.view.setTag(jsonArray);
+        App.jsonArray = jsonArray;
+
         holder.dayTextView.setText(App.getDifference(jsonObject.get("publishedAt")+""));
         //holder.dayTextView.setText(jsonObject.get("publishedAt")+"");
         holder.titleTextView.setText(jsonObject.get("title") + "");
@@ -60,52 +65,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public class InnerClass extends RecyclerView.ViewHolder {
         private TextView dayTextView, titleTextView, authorTextView;
+        private View view;
 
-        public InnerClass(@NonNull View itemView) {
+        private InnerClass(@NonNull View itemView) {
             super(itemView);
 
+            view = itemView;
             dayTextView = itemView.findViewById(R.id.dayTextView);
             titleTextView = itemView.findViewById(R.id.titleTextView);
             authorTextView = itemView.findViewById(R.id.authorTextView);
-        }
-    }
 
-    class GetDifference {
-        private static final int SECOND_MILLIS = 1000;
-        private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
-        private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
-        private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
-
-
-        public String getTimeAgo(long time) {
-            if (time < 1000000000000L) {
-                // if timestamp given in seconds, convert to millis
-                time *= 1000;
-            }
-
-            //long now = getCurrentTime(ctx);
-            long now = System.currentTimeMillis();
-            if (time > now || time <= 0) {
-                return null;
-            }
-
-            // TODO: localize
-            final long diff = now - time;
-            if (diff < MINUTE_MILLIS) {
-                return "just now";
-            } else if (diff < 2 * MINUTE_MILLIS) {
-                return "a minute ago";
-            } else if (diff < 50 * MINUTE_MILLIS) {
-                return diff / MINUTE_MILLIS + " minutes ago";
-            } else if (diff < 90 * MINUTE_MILLIS) {
-                return "an hour ago";
-            } else if (diff < 24 * HOUR_MILLIS) {
-                return diff / HOUR_MILLIS + " hours ago";
-            } else if (diff < 48 * HOUR_MILLIS) {
-                return "yesterday";
-            } else {
-                return diff / DAY_MILLIS + " days ago";
-            }
+            itemView.setOnClickListener(view -> {
+                    Intent intent = new Intent(context,NewsDetailActivity.class);
+                    //intent.putExtra("jA",object.toString());
+                    context.startActivity(intent);
+            });
         }
     }
 }

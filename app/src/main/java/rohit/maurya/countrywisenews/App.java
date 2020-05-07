@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,6 +27,7 @@ public class App extends Application
     private static OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor);
     private static OkHttpClient okHttpClient = okHttpClientBuilder.build();
 
+    public static JsonArray jsonArray = new JsonArray();
 
     public static <T> T createService(Class<T> serviceClass){
         if(retrofit == null){
