@@ -1,14 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context=".fragment.SettingFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:padding="19dp">
 
-</FrameLayout>
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="sans-serif-medium"
+                android:text="Country" />
+
+            <ImageView
+                android:layout_width="?actionBarSize"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_marginEnd="61dp"
+                android:src="@drawable/ic_217_india" />
+
+            <ImageView
+                android:layout_width="?actionBarSize"
+                android:layout_height="?actionBarSize"
+                android:layout_gravity="end"
+                android:src="@drawable/ic_keyboard_arrow_down_black_24dp" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fL"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:layout_below="@id/frameLayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="sans-serif-medium"
+                android:text="Notification" />
+
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="end" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:layout_below="@id/fL">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="sans-serif-medium"
+                android:text="Switch to" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="?actionBarSize"
+                android:gravity="center"
+                android:layout_gravity="end"
+                android:text="Dark Mode"/>
+
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="v - 2.2"
+            android:fontFamily="serif"
+            android:layout_centerHorizontal="true"/>
+
+    </RelativeLayout>
+
+</layout>

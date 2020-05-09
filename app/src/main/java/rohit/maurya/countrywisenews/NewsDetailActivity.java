@@ -66,7 +66,11 @@ public class NewsDetailActivity extends AppCompatActivity {
             string = jsonObject.get("title") + "";
             ((TextView) view.findViewById(R.id.titleTextView)).setText(string);
 
-            string = jsonObject.get("description") + "";
+            string = jsonObject.get("content") + "";
+            if (string.contains("["))
+                string = string.substring(0, string.lastIndexOf("["));
+            else
+                string = jsonObject.get("description")+"";
             ((TextView) view.findViewById(R.id.bodyTextView)).setText(string);
 
             jsonObject = (JsonObject) jsonObject.get("source");

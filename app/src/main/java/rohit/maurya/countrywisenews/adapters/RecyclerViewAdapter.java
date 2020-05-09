@@ -45,7 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             return;
 
         //holder.view.setTag(jsonArray);
-        App.jsonArray = jsonArray;
+        //App.jsonArray = jsonArray;
 
         holder.dayTextView.setText(App.getDifference(jsonObject.get("publishedAt")+""));
         //holder.dayTextView.setText(jsonObject.get("publishedAt")+"");

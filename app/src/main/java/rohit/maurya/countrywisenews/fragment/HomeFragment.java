@@ -25,9 +25,9 @@ import rohit.maurya.countrywisenews.adapters.RecyclerViewAdapter;
 import rohit.maurya.countrywisenews.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
-    private View view;
     private Context context;
     private FragmentHomeBinding fragmentHomeBinding;
+    public static JsonArray jsonArray = new JsonArray();
 
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
@@ -58,7 +58,8 @@ public class HomeFragment extends Fragment {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     //ArrayList<JsonObject> arrayList = response.body().getList();
-                    JsonArray jsonArray = response.body().getJsonArray();
+                    jsonArray = response.body().getJsonArray();
+                    App.jsonArray = jsonArray;
                     //Log.e("responseIs", list + "");
 
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
