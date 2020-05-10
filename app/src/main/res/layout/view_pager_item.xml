@@ -40,6 +40,7 @@
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="12dp"
+            android:clickable="true"
             android:textStyle="italic"
             android:fontFamily="sans-serif-condensed-medium"/>
 

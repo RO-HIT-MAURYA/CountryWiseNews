@@ -4,19 +4,33 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
 
-import android.media.Image;
+import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Objects;
 
 import rohit.maurya.countrywisenews.App;
 import rohit.maurya.countrywisenews.R;
@@ -82,11 +96,20 @@ public class NewsDetailActivity extends AppCompatActivity {
                 string = jsonObject.get("description")+"";
             holder.tV.setText(string);
 
+            string = jsonObject.get("url")+"";
+            holder.t.setTag(string);
+
             jsonObject = (JsonObject) jsonObject.get("source");
             string = jsonObject.get("name") + "";
             if (!string.equalsIgnoreCase("null"))
-                holder.t.setText("swipe left for more at " + string);
+                makeSpannableString(holder.t,"Click for more at "+string);
 
+            holder.t.setOnClickListener(view -> {
+                String str = view.getTag()+"";
+                str = str.replace("\"","");
+                Log.e("urlIs",str+"");
+                startWebView(str);
+            });
         }
 
         @Override
@@ -109,5 +132,56 @@ public class NewsDetailActivity extends AppCompatActivity {
                 imageView = itemView.findViewById(R.id.imageView);
             }
         }
+    }
+
+    private void makeSpannableString(TextView textView, String string)
+    {
+        SpannableString spannableString = new SpannableString(string);
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View view) {
+                /*Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);*/
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setColor(getResources().getColor(R.color.colorBlack));
+            }
+        };
+
+        spannableString.setSpan(clickableSpan, string.indexOf("t")+2, string.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textView.setText(spannableString);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    public void startWebView(String string) {
+
+        View view = LayoutInflater.from(this).inflate(R.layout.web_view_container,null,false);
+        WebView webView = view.findViewById(R.id.webView);// new WebView(context);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.clearHistory();
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView v, String url, Bitmap favicon) {
+                Log.e("onPageStarted", url);
+                view.findViewById(R.id.linearLayout).setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onPageFinished(WebView v, String url) {
+                Log.e("onPageFinished", url);
+            }
+        });
+
+        webView.loadUrl(string);
+
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(view);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.argb(50, 0, 0, 0)));
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialog.show();
     }
 }
