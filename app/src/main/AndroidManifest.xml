@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
-        <activity android:name=".NewsDetailActivity"></activity>
+        <activity android:name=".activity.NewsDetailActivity"></activity>
         <activity android:name=".activity.BaseActivity" />
         <activity android:name=".activity.SplashScreenActivity">
             <intent-filter>

@@ -1,4 +1,4 @@
-package rohit.maurya.countrywisenews;
+package rohit.maurya.countrywisenews.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +16,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
-import rohit.maurya.countrywisenews.databinding.ActivityBaseBinding;
+import rohit.maurya.countrywisenews.App;
+import rohit.maurya.countrywisenews.R;
 import rohit.maurya.countrywisenews.databinding.ActivityNewsDetailBinding;
 
 public class NewsDetailActivity extends AppCompatActivity {
@@ -27,9 +28,13 @@ public class NewsDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityNewsDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_news_detail);
 
+        int i = getIntent().getIntExtra("int",0);
+
         JsonArray jsonArray = App.jsonArray;
         if (jsonArray != null)
             activityNewsDetailBinding.verticalViewPager.setAdapter(new ViewPagerAdapter(jsonArray));
+
+        activityNewsDetailBinding.verticalViewPager.setCurrentItem(i);
 
     }
 
@@ -67,6 +72,9 @@ public class NewsDetailActivity extends AppCompatActivity {
             ((TextView) view.findViewById(R.id.titleTextView)).setText(string);
 
             string = jsonObject.get("content") + "";
+            string = string.replace("\"","");
+            string = string.replace("\r","");
+            string = string.replace("\n"," ");
             if (string.contains("["))
                 string = string.substring(0, string.lastIndexOf("["));
             else

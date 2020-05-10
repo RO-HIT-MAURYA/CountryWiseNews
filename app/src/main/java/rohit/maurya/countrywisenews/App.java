@@ -57,15 +57,15 @@ public class App extends Application
 
             int i = (int)TimeUnit.MILLISECONDS.toDays(l);
             if (i > 0)
-                return i+" day ago";
+                return i+" day ago ";
 
             i = (int)TimeUnit.MILLISECONDS.toHours(l);
             if (i > 0)
-                return i+" hr ago";
+                return i+" hr ago ";
 
             i = (int)TimeUnit.MILLISECONDS.toMinutes(l);
             if (i > 0)
-                return i+" min ago";
+                return i+" min ago ";
 
         } catch (ParseException e) {
             e.printStackTrace();

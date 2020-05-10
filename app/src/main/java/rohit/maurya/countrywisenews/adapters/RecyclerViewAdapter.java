@@ -13,7 +13,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import rohit.maurya.countrywisenews.App;
-import rohit.maurya.countrywisenews.NewsDetailActivity;
+import rohit.maurya.countrywisenews.activity.NewsDetailActivity;
 import rohit.maurya.countrywisenews.R;
 import rohit.maurya.countrywisenews.activity.BaseActivity;
 
@@ -44,8 +44,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (jsonObject == null)
             return;
 
-        //holder.view.setTag(jsonArray);
-        //App.jsonArray = jsonArray;
+        holder.view.setTag(position);
 
         holder.dayTextView.setText(App.getDifference(jsonObject.get("publishedAt")+""));
         //holder.dayTextView.setText(jsonObject.get("publishedAt")+"");
@@ -77,7 +76,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(context,NewsDetailActivity.class);
-                    //intent.putExtra("jA",object.toString());
+                    intent.putExtra("int",(int)view.getTag());
                     context.startActivity(intent);
             });
         }
