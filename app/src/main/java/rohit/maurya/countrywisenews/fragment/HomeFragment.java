@@ -19,7 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import rohit.maurya.countrywisenews.ApiInterface;
 import rohit.maurya.countrywisenews.App;
-import rohit.maurya.countrywisenews.News;
+import rohit.maurya.countrywisenews.ResponseFormat;
 import rohit.maurya.countrywisenews.R;
 import rohit.maurya.countrywisenews.adapters.RecyclerViewAdapter;
 import rohit.maurya.countrywisenews.databinding.FragmentHomeBinding;
@@ -31,8 +31,6 @@ public class HomeFragment extends Fragment {
 
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -51,10 +49,10 @@ public class HomeFragment extends Fragment {
     private void getHomeNews() {
         ApiInterface apiInterface = App.createService(ApiInterface.class);
 
-        Call<News> call = apiInterface.getTopNews();
-        call.enqueue(new Callback<News>() {
+        Call<ResponseFormat> call = apiInterface.getTopNews();
+        call.enqueue(new Callback<ResponseFormat>() {
             @Override
-            public void onResponse(Call<News> call, Response<News> response) {
+            public void onResponse(Call<ResponseFormat> call, Response<ResponseFormat> response) {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     //ArrayList<JsonObject> arrayList = response.body().getList();
@@ -70,7 +68,7 @@ public class HomeFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<News> call, Throwable t) {
+            public void onFailure(Call<ResponseFormat> call, Throwable t) {
                 Log.e("errorIs", t.getMessage());
             }
         });

@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.WindowManager;
 
+import io.realm.Realm;
 import rohit.maurya.countrywisenews.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -19,7 +20,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen);
 
-
+        Realm.init(this);
 
        /* Dexter.withActivity(this)
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)

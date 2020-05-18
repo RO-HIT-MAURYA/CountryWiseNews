@@ -31,7 +31,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import rohit.maurya.countrywisenews.ApiInterface;
 import rohit.maurya.countrywisenews.App;
-import rohit.maurya.countrywisenews.News;
+import rohit.maurya.countrywisenews.ResponseFormat;
 import rohit.maurya.countrywisenews.R;
 import rohit.maurya.countrywisenews.activity.BaseActivity;
 import rohit.maurya.countrywisenews.adapters.RecyclerViewAdapter;
@@ -106,7 +106,7 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
 
     private void initializeArray() {
         ApiInterface apiInterface = App.createService(ApiInterface.class);
-        Call<News> call;
+        Call<ResponseFormat> call;
 
         if (businessArray == null) {
             call = apiInterface.getBusinessNews();
@@ -115,31 +115,36 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
                 App.jsonArray = businessArray;
                 businessAdapter = new RecyclerViewAdapter(context,businessArray);
             });
-        } else if (entertainmentArray == null) {
+        }
+        else if (entertainmentArray == null) {
             call = apiInterface.getEntertainmentNews();
             loadData(call, jsonArray -> {
                 entertainmentArray = jsonArray;
                 entertainmentAdapter = new RecyclerViewAdapter(context,entertainmentArray);
             });
-        } else if (healthArray == null) {
+        }
+        else if (healthArray == null) {
             call = apiInterface.getHealthNews();
             loadData(call, jsonArray -> {
                 healthArray = jsonArray;
                 healthAdapter = new RecyclerViewAdapter(context,healthArray);
             });
-        } else if (scienceArray == null) {
+        }
+        else if (scienceArray == null) {
             call = apiInterface.getScienceNews();
             loadData(call, jsonArray -> {
                 scienceArray = jsonArray;
                 scienceAdapter = new RecyclerViewAdapter(context,scienceArray);
             });
-        } else if (sportsArray == null) {
+        }
+        else if (sportsArray == null) {
             call = apiInterface.getSportsNews();
             loadData(call, jsonArray -> {
                 sportsArray = jsonArray;
                 sportsAdapter = new RecyclerViewAdapter(context,sportsArray);
             });
-        } else if (technologyArray == null) {
+        }
+        else if (technologyArray == null) {
             call = apiInterface.getTechnologyNews();
             loadData(call, jsonArray -> {
                 technologyArray = jsonArray;
@@ -152,10 +157,10 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
         }
     }
 
-    private void loadData(Call<News> call, CallBack callBack) {
-        call.enqueue(new Callback<News>() {
+    private void loadData(Call<ResponseFormat> call, CallBack callBack) {
+        call.enqueue(new Callback<ResponseFormat>() {
             @Override
-            public void onResponse(Call<News> call, Response<News> response) {
+            public void onResponse(Call<ResponseFormat> call, Response<ResponseFormat> response) {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     //ArrayList<JsonObject> arrayList = response.body().getList();
@@ -173,7 +178,7 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
             }
 
             @Override
-            public void onFailure(Call<News> call, Throwable t) {
+            public void onFailure(Call<ResponseFormat> call, Throwable t) {
                 Log.e("errorIs", t.getMessage());
                 callBack.response(new JsonArray());
                 initializeArray();

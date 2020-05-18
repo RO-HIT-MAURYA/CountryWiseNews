@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "rohit.maurya.countrywisenews"
         minSdkVersion 21
@@ -44,5 +45,7 @@ dependencies {
     implementation 'com.victor:lib:1.0.4'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.palette:palette:1.0.0'
+
     //implementation "com.karumi:dexter:5.0.0"
 }
