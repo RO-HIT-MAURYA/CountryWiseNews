@@ -6,12 +6,16 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -73,5 +77,50 @@ public class App extends Application
         }
 
         return  "";
+    }
+
+    public static void storeDataInDb(int i, JsonArray jsonArray,DataStoredCallBack dataStoredCallBack)
+    {
+        Realm realm = Realm.getDefaultInstance();
+
+        JsonObject jsonObject;
+
+        for (JsonElement jsonElement : jsonArray)
+        {
+            jsonObject = (JsonObject)jsonElement;
+            long l = realm.where(News.class).equalTo("title",jsonObject.get("title")+"").count();
+            if (l > 0)
+                continue;
+
+            Log.e("continueIs","executed");
+
+            realm.beginTransaction();
+
+            //News news = realm.createObject(News.class, jsonObject.get("title")+"");
+            News news = realm.createObject(News.class);
+            news.setTitle(jsonObject.get("title")+"");
+            news.setNewsType(i);
+            news.setPublishedAt(jsonObject.get("publishedAt")+"");
+            news.setAuthor(jsonObject.get("author")+"");
+            news.setDescription(jsonObject.get("description")+"");
+            news.setUrl(jsonObject.get("url")+"");
+            news.setUrlToImage(jsonObject.get("urlToImage")+"");
+
+            jsonObject = (JsonObject)jsonObject.get("source");
+            news.setName(jsonObject.get("name")+"");
+
+            realm.commitTransaction();
+        }
+
+        /*RealmResults<News> realmResults = realm.where(News.class).equalTo("newsType",6).findAll();
+        Log.e("realmResultIs",realmResults.size()+"");
+        Log.e("asJsonIs",realmResults.asJSON()+"");*/
+
+        dataStoredCallBack.dataStoredSuccessfully(true);
+    }
+
+    public interface DataStoredCallBack
+    {
+        void dataStoredSuccessfully(boolean bool);
     }
 }

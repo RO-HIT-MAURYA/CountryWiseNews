@@ -58,12 +58,13 @@ public class HomeFragment extends Fragment {
                     //ArrayList<JsonObject> arrayList = response.body().getList();
                     jsonArray = response.body().getJsonArray();
                     App.jsonArray = jsonArray;
+                    App.storeDataInDb(6, jsonArray, bool -> {
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+                        fragmentHomeBinding.recyclerView.setLayoutManager(linearLayoutManager);
+                        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(context,jsonArray);
+                        fragmentHomeBinding.recyclerView.setAdapter(recyclerViewAdapter);
+                    });
                     //Log.e("responseIs", list + "");
-
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-                    fragmentHomeBinding.recyclerView.setLayoutManager(linearLayoutManager);
-                    RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(context,jsonArray);
-                    fragmentHomeBinding.recyclerView.setAdapter(recyclerViewAdapter);
                 }
             }
 
