@@ -31,8 +31,6 @@ public class App extends Application
     private static OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor);
     private static OkHttpClient okHttpClient = okHttpClientBuilder.build();
 
-    public static JsonArray jsonArray = new JsonArray();
-
     public static <T> T createService(Class<T> serviceClass){
         if(retrofit == null){
             retrofit = new Retrofit.Builder()
@@ -116,11 +114,21 @@ public class App extends Application
         Log.e("realmResultIs",realmResults.size()+"");
         Log.e("asJsonIs",realmResults.asJSON()+"");*/
 
-        dataStoredCallBack.dataStoredSuccessfully(true);
+        dataStoredCallBack.dataStoredSuccessfully();
+    }
+
+    public static String filterString(String string)
+    {
+        string = string.replace("\"","");
+        string = string.replace("\\","");
+        string = string.replace("\r", "");
+        string = string.replace("\n", " ");
+
+        return string;
     }
 
     public interface DataStoredCallBack
     {
-        void dataStoredSuccessfully(boolean bool);
+        void dataStoredSuccessfully();
     }
 }

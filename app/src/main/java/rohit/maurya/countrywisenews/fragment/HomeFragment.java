@@ -13,12 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import rohit.maurya.countrywisenews.ApiInterface;
 import rohit.maurya.countrywisenews.App;
+import rohit.maurya.countrywisenews.News;
 import rohit.maurya.countrywisenews.ResponseFormat;
 import rohit.maurya.countrywisenews.R;
 import rohit.maurya.countrywisenews.adapters.RecyclerViewAdapter;
@@ -27,7 +31,6 @@ import rohit.maurya.countrywisenews.databinding.FragmentHomeBinding;
 public class HomeFragment extends Fragment {
     private Context context;
     private FragmentHomeBinding fragmentHomeBinding;
-    public static JsonArray jsonArray = new JsonArray();
 
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
@@ -50,20 +53,15 @@ public class HomeFragment extends Fragment {
         ApiInterface apiInterface = App.createService(ApiInterface.class);
 
         Call<ResponseFormat> call = apiInterface.getTopNews();
-        call.enqueue(new Callback<ResponseFormat>() {
+        call.enqueue(new Callback<ResponseFormat>()
+        {
             @Override
             public void onResponse(Call<ResponseFormat> call, Response<ResponseFormat> response) {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     //ArrayList<JsonObject> arrayList = response.body().getList();
-                    jsonArray = response.body().getJsonArray();
-                    App.jsonArray = jsonArray;
-                    App.storeDataInDb(6, jsonArray, bool -> {
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-                        fragmentHomeBinding.recyclerView.setLayoutManager(linearLayoutManager);
-                        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(context,jsonArray);
-                        fragmentHomeBinding.recyclerView.setAdapter(recyclerViewAdapter);
-                    });
+                    JsonArray jsonArray = response.body().getJsonArray();
+                    App.storeDataInDb(6, jsonArray, () -> setAdapter());
                     //Log.e("responseIs", list + "");
                 }
             }
@@ -71,7 +69,20 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<ResponseFormat> call, Throwable t) {
                 Log.e("errorIs", t.getMessage());
+                setAdapter();
             }
         });
+    }
+
+    private void setAdapter() {
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<News> realmResults = realm.where(News.class).equalTo("newsType",6).findAll();
+        JsonArray jsonArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        fragmentHomeBinding.recyclerView.setLayoutManager(linearLayoutManager);
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(context,jsonArray);
+        fragmentHomeBinding.recyclerView.setAdapter(recyclerViewAdapter);
     }
 }

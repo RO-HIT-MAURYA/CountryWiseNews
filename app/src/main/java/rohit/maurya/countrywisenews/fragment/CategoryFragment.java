@@ -112,7 +112,6 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
             call = apiInterface.getBusinessNews();
             loadData(call, jsonArray -> {
                 businessArray = jsonArray;
-                App.jsonArray = businessArray;
                 businessAdapter = new RecyclerViewAdapter(context,businessArray);
             });
         }
@@ -189,7 +188,7 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
     @Override
     public void onTabSelected(TabLayout.Tab tab)
     {
-        if (tab.getTag() instanceof Integer)
+        /*if (tab.getTag() instanceof Integer)
         {
             int i = (int)tab.getTag();
             if (i == 0)
@@ -206,7 +205,7 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
                 App.jsonArray = technologyArray;
 
             fragmentCategoryBinding.viewPager.setCurrentItem(i);
-        }
+        }*/
 
     }
 

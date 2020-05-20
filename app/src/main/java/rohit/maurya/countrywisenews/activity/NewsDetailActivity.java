@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -51,7 +52,8 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         int i = getIntent().getIntExtra("int", 0);
 
-        JsonArray jsonArray = App.jsonArray;
+        JsonArray jsonArray = new JsonParser().parse(getIntent().getStringExtra("jsonArray")).getAsJsonArray();
+
         if (jsonArray != null)
             activityNewsDetailBinding.viewPager2.setAdapter(new ViewPagerAdapter2(jsonArray));
 
@@ -79,7 +81,7 @@ public class NewsDetailActivity extends AppCompatActivity {
             JsonObject jsonObject = (JsonObject) jsonArray.get(position);
 
             String string = jsonObject.get("urlToImage") + "";
-            string = string.replace("\"", "");
+            string = App.filterString(string);
             Log.e("imageIs", string);
             if (!string.isEmpty()) {
                 target = new Target() {
@@ -110,29 +112,33 @@ public class NewsDetailActivity extends AppCompatActivity {
             //Picasso.get().load(string).into(holder.imageView);
 
             string = jsonObject.get("title") + "";
+            string = App.filterString(string);
             holder.textView.setText(string);
 
             string = jsonObject.get("content") + "";
-            string = string.replace("\"", "");
-            string = string.replace("\r", "");
-            string = string.replace("\n", " ");
+            string = App.filterString(string);
+            string = App.filterString(string);
+
             if (string.contains("["))
                 string = string.substring(0, string.lastIndexOf("["));
             else
                 string = jsonObject.get("description") + "";
+            string = App.filterString(string);
             holder.tV.setText(string);
 
             string = jsonObject.get("url") + "";
+            string = App.filterString(string);
             holder.t.setTag(string);
 
-            jsonObject = (JsonObject) jsonObject.get("source");
+            //jsonObject = (JsonObject) jsonObject.get("source");
             string = jsonObject.get("name") + "";
+            string = App.filterString(string);
             if (!string.equalsIgnoreCase("null"))
                 makeSpannableString(holder.t, "Click for more at " + string);
 
             holder.t.setOnClickListener(view -> {
                 String str = view.getTag() + "";
-                str = str.replace("\"", "");
+                str = App.filterString(str);
                 Log.e("urlIs", str + "");
                 startWebView(str);
             });

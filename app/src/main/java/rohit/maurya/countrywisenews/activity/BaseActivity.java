@@ -54,7 +54,6 @@ public class BaseActivity extends AppCompatActivity {
             finish();
         else if (categoryFragment != null && categoryFragment.isVisible())
         {
-            App.jsonArray = HomeFragment.jsonArray;
             decideBottomSelection(activityBaseBinding.homeLayout);
         }
         else if (settingFragment !=null && settingFragment.isVisible())

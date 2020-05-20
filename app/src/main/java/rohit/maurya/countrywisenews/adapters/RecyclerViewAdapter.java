@@ -18,7 +18,7 @@ import rohit.maurya.countrywisenews.R;
 import rohit.maurya.countrywisenews.activity.BaseActivity;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.InnerClass> {
-    private JsonArray jsonArray = new JsonArray();
+    private JsonArray jsonArray;
     private Context context;
 
     public RecyclerViewAdapter(Context context, JsonArray jsonArray) {
@@ -46,11 +46,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.view.setTag(position);
 
-        holder.dayTextView.setText(App.getDifference(jsonObject.get("publishedAt")+""));
+        String string = jsonObject.get("publishedAt")+"";
+        string = App.filterString(string);
+        holder.dayTextView.setText(App.getDifference(string));
         //holder.dayTextView.setText(jsonObject.get("publishedAt")+"");
-        holder.titleTextView.setText(jsonObject.get("title") + "");
 
-        String string = jsonObject.get("author") + "";
+        string = jsonObject.get("title")+"";
+        string = App.filterString(string);
+        holder.titleTextView.setText(string);
+
+        string = jsonObject.get("author") + "";
+        string = App.filterString(string);
         if (string.equalsIgnoreCase("null"))
             holder.authorTextView.setText("\" Unknown \"");
         else
@@ -77,6 +83,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(context,NewsDetailActivity.class);
                     intent.putExtra("int",(int)view.getTag());
+                    intent.putExtra("jsonArray",jsonArray+"");
                     context.startActivity(intent);
             });
         }
