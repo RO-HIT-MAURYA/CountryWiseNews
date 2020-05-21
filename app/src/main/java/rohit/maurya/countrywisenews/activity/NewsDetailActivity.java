@@ -1,7 +1,6 @@
 package rohit.maurya.countrywisenews.activity;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.palette.graphics.Palette;
@@ -18,6 +17,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,12 +33,12 @@ import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
 import rohit.maurya.countrywisenews.App;
 import rohit.maurya.countrywisenews.R;
+import rohit.maurya.countrywisenews.RealmHelper;
 import rohit.maurya.countrywisenews.databinding.ActivityNewsDetailBinding;
 
 public class NewsDetailActivity extends AppCompatActivity {
@@ -50,6 +50,8 @@ public class NewsDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityNewsDetailBinding activityNewsDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_news_detail);
 
+
+
         int i = getIntent().getIntExtra("int", 0);
 
         JsonArray jsonArray = new JsonParser().parse(getIntent().getStringExtra("jsonArray")).getAsJsonArray();
@@ -58,7 +60,6 @@ public class NewsDetailActivity extends AppCompatActivity {
             activityNewsDetailBinding.viewPager2.setAdapter(new ViewPagerAdapter2(jsonArray));
 
         activityNewsDetailBinding.viewPager2.setCurrentItem(i);
-
     }
 
     private class ViewPagerAdapter2 extends RecyclerView.Adapter<ViewPagerAdapter2.InnerClass> {
@@ -88,18 +89,16 @@ public class NewsDetailActivity extends AppCompatActivity {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         holder.imageView.setImageBitmap(bitmap);
-                        Palette.from(bitmap).generate(palette -> {
-                            Log.e("onGenerated", "isExecuted");
-                            assert palette != null;
-                            //Log.e("colorIs",palette.getDarkMutedColor(getResources().getColor(R.color.colorBlack))+"");
-                            //getWindow().setStatusBarColor(palette.getDarkMutedColor(getResources().getColor(R.color.colorPrimaryDark)));
-                            getWindow().setStatusBarColor(palette.getDominantColor(getResources().getColor(R.color.colorPrimaryDark)));
-                        });
+                        String string = jsonObject.get("title") + "";
+                        changeStatusBarColorAndStoreInDb(string, bitmap);
                     }
 
                     @Override
                     public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-
+                        Log.e("failedTo", "loadBitmap");
+                        String string = jsonObject.get("title") + "";
+                        string = RealmHelper.getBase64String(string);
+                        Log.e("base64Is",string+"");
                     }
 
                     @Override
@@ -164,6 +163,26 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void changeStatusBarColorAndStoreInDb(String titleName, Bitmap bitmap) {
+        Palette.from(bitmap).generate(palette -> {
+            Log.e("onGenerated", "isExecuted");
+            assert palette != null;
+            //Log.e("colorIs",palette.getDarkMutedColor(getResources().getColor(R.color.colorBlack))+"");
+            //getWindow().setStatusBarColor(palette.getDarkMutedColor(getResources().getColor(R.color.colorPrimaryDark)));
+            getWindow().setStatusBarColor(palette.getDominantColor(getResources().getColor(R.color.colorPrimaryDark)));
+        });
+
+        if (RealmHelper.isImageByteExist(titleName)) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] bytes = byteArrayOutputStream.toByteArray();
+            String string = Base64.encodeToString(bytes,Base64.DEFAULT);
+
+            titleName = titleName.replace("\"", "");
+            RealmHelper.updateDbWithImage(titleName, string);
+        }
+    }
+
     private void makeSpannableString(TextView textView, String string) {
         SpannableString spannableString = new SpannableString(string);
         ClickableSpan clickableSpan = new ClickableSpan() {
@@ -181,7 +200,7 @@ public class NewsDetailActivity extends AppCompatActivity {
             }
         };
 
-        spannableString.setSpan(clickableSpan, string.indexOf("t") + 2, string.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(clickableSpan, string.indexOf("t") + 2, string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         textView.setText(spannableString);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
     }

@@ -17,12 +17,14 @@ import com.google.gson.JsonParser;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import rohit.maurya.countrywisenews.ApiInterface;
 import rohit.maurya.countrywisenews.App;
 import rohit.maurya.countrywisenews.News;
+import rohit.maurya.countrywisenews.RealmHelper;
 import rohit.maurya.countrywisenews.ResponseFormat;
 import rohit.maurya.countrywisenews.R;
 import rohit.maurya.countrywisenews.adapters.RecyclerViewAdapter;
@@ -61,7 +63,7 @@ public class HomeFragment extends Fragment {
                     assert response.body() != null;
                     //ArrayList<JsonObject> arrayList = response.body().getList();
                     JsonArray jsonArray = response.body().getJsonArray();
-                    App.storeDataInDb(6, jsonArray, () -> setAdapter());
+                    RealmHelper.storeDataInDb(6, jsonArray, () -> setAdapter());
                     //Log.e("responseIs", list + "");
                 }
             }
@@ -78,6 +80,7 @@ public class HomeFragment extends Fragment {
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<News> realmResults = realm.where(News.class).equalTo("newsType",6).findAll();
+        realmResults = realmResults.sort("publishedAt", Sort.DESCENDING);
         JsonArray jsonArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);

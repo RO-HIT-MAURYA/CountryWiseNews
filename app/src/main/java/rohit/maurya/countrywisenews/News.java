@@ -14,17 +14,7 @@ public class News extends RealmObject
     private String name;
     private String url;
     private String urlToImage;
-
-    /*public News(String title, int newsType, String publishedAt, String author, String description, String name, String url, String urlToImage) {
-        this.title = title;
-        this.newsType = newsType;
-        this.publishedAt = publishedAt;
-        this.author = author;
-        this.description = description;
-        this.name = name;
-        this.url = url;
-        this.urlToImage = urlToImage;
-    }*/
+    private String base64String;
 
     public String getTitle() {
         return title;
@@ -88,5 +78,13 @@ public class News extends RealmObject
 
     public void setUrlToImage(String urlToImage) {
         this.urlToImage = urlToImage;
+    }
+
+    public String getBase64String() {
+        return base64String;
+    }
+
+    public void setBase64String(String base64String) {
+        this.base64String = base64String;
     }
 }

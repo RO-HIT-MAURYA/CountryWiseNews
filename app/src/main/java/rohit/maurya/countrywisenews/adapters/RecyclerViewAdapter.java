@@ -2,6 +2,7 @@ package rohit.maurya.countrywisenews.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -46,12 +47,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.view.setTag(position);
 
-        String string = jsonObject.get("publishedAt")+"";
+        String string = jsonObject.get("publishedAt") + "";
         string = App.filterString(string);
         holder.dayTextView.setText(App.getDifference(string));
         //holder.dayTextView.setText(jsonObject.get("publishedAt")+"");
 
-        string = jsonObject.get("title")+"";
+        string = jsonObject.get("title") + "";
         string = App.filterString(string);
         holder.titleTextView.setText(string);
 
@@ -81,10 +82,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             authorTextView = itemView.findViewById(R.id.authorTextView);
 
             itemView.setOnClickListener(view -> {
-                    Intent intent = new Intent(context,NewsDetailActivity.class);
-                    intent.putExtra("int",(int)view.getTag());
-                    intent.putExtra("jsonArray",jsonArray+"");
-                    context.startActivity(intent);
+                Intent intent = new Intent(context, NewsDetailActivity.class);
+                intent.putExtra("int", (int) view.getTag());
+                Log.e("activityIs", (int)view.getTag()+"");
+                intent.putExtra("jsonArray", jsonArray + "");
+                Log.e("started", jsonArray+"");
+                context.startActivity(intent);
             });
         }
     }
