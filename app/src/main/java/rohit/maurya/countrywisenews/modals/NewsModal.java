@@ -1,9 +1,9 @@
-package rohit.maurya.countrywisenews;
+package rohit.maurya.countrywisenews.modals;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class News extends RealmObject
+public class NewsModal extends RealmObject
 {
     //@PrimaryKey
     private String title;
@@ -14,7 +14,6 @@ public class News extends RealmObject
     private String name;
     private String url;
     private String urlToImage;
-    private String base64String;
 
     public String getTitle() {
         return title;
@@ -78,13 +77,5 @@ public class News extends RealmObject
 
     public void setUrlToImage(String urlToImage) {
         this.urlToImage = urlToImage;
-    }
-
-    public String getBase64String() {
-        return base64String;
-    }
-
-    public void setBase64String(String base64String) {
-        this.base64String = base64String;
     }
 }

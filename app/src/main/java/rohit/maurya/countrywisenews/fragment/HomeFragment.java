@@ -23,7 +23,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import rohit.maurya.countrywisenews.ApiInterface;
 import rohit.maurya.countrywisenews.App;
-import rohit.maurya.countrywisenews.News;
+import rohit.maurya.countrywisenews.modals.NewsModal;
 import rohit.maurya.countrywisenews.RealmHelper;
 import rohit.maurya.countrywisenews.ResponseFormat;
 import rohit.maurya.countrywisenews.R;
@@ -79,7 +79,7 @@ public class HomeFragment extends Fragment {
     private void setAdapter() {
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<News> realmResults = realm.where(News.class).equalTo("newsType",6).findAll();
+        RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType",6).findAll();
         realmResults = realmResults.sort("publishedAt", Sort.DESCENDING);
         JsonArray jsonArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
 

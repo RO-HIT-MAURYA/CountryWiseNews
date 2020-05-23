@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -51,7 +52,6 @@ public class NewsDetailActivity extends AppCompatActivity {
         ActivityNewsDetailBinding activityNewsDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_news_detail);
 
 
-
         int i = getIntent().getIntExtra("int", 0);
 
         JsonArray jsonArray = new JsonParser().parse(getIntent().getStringExtra("jsonArray")).getAsJsonArray();
@@ -90,7 +90,8 @@ public class NewsDetailActivity extends AppCompatActivity {
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         holder.imageView.setImageBitmap(bitmap);
                         String string = jsonObject.get("title") + "";
-                        changeStatusBarColorAndStoreInDb(string, bitmap);
+                        storeImageInDb(string, bitmap);
+                        changeStatusBarColor(bitmap);
                     }
 
                     @Override
@@ -98,7 +99,16 @@ public class NewsDetailActivity extends AppCompatActivity {
                         Log.e("failedTo", "loadBitmap");
                         String string = jsonObject.get("title") + "";
                         string = RealmHelper.getBase64String(string);
-                        Log.e("base64Is",string+"");
+                        byte[] bytes = Base64.decode(string, Base64.DEFAULT);
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        holder.imageView.setImageBitmap(bitmap);
+                        if (string != null && !string.isEmpty())
+                            changeStatusBarColor(bitmap);
+                        /*Glide.with(NewsDetailActivity.this)
+                                .asBitmap()
+                                .load(bytes)
+                                .into(holder.imageView);*/
+                        Log.e("base64Is", string + "empty ");
                     }
 
                     @Override
@@ -163,7 +173,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void changeStatusBarColorAndStoreInDb(String titleName, Bitmap bitmap) {
+    private void changeStatusBarColor(Bitmap bitmap) {
         Palette.from(bitmap).generate(palette -> {
             Log.e("onGenerated", "isExecuted");
             assert palette != null;
@@ -171,15 +181,17 @@ public class NewsDetailActivity extends AppCompatActivity {
             //getWindow().setStatusBarColor(palette.getDarkMutedColor(getResources().getColor(R.color.colorPrimaryDark)));
             getWindow().setStatusBarColor(palette.getDominantColor(getResources().getColor(R.color.colorPrimaryDark)));
         });
+    }
 
+    private void storeImageInDb(String titleName, Bitmap bitmap) {
         if (RealmHelper.isImageByteExist(titleName)) {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] bytes = byteArrayOutputStream.toByteArray();
-            String string = Base64.encodeToString(bytes,Base64.DEFAULT);
+            String string = Base64.encodeToString(bytes, Base64.DEFAULT);
 
-            titleName = titleName.replace("\"", "");
-            RealmHelper.updateDbWithImage(titleName, string);
+            titleName = App.filterString(titleName);
+            RealmHelper.storeBase64String(titleName, string);
         }
     }
 

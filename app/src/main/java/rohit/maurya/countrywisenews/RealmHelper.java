@@ -1,7 +1,5 @@
 package rohit.maurya.countrywisenews;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
@@ -9,7 +7,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
+import rohit.maurya.countrywisenews.modals.ImageModal;
+import rohit.maurya.countrywisenews.modals.NewsModal;
 
 public class RealmHelper {
     public static void storeDataInDb(int i, JsonArray jsonArray, App.DataStoredCallBack dataStoredCallBack) {
@@ -20,7 +19,7 @@ public class RealmHelper {
         for (JsonElement jsonElement : jsonArray) {
             jsonObject = (JsonObject) jsonElement;
 
-            long l = realm.where(News.class).equalTo("title", App.filterString(jsonObject.get("title") + "")).count();
+            long l = realm.where(NewsModal.class).equalTo("title", App.filterString(jsonObject.get("title") + "")).count();
             //Log.e("result1Is",realmResults.asJSON()+"");
             if (l > 0)
                 continue;
@@ -29,19 +28,22 @@ public class RealmHelper {
 
             realm.beginTransaction();
 
-            //News news = realm.createObject(News.class, jsonObject.get("title")+"");
-            News news = realm.createObject(News.class);
-            //Log.e("StoredTitleIs",App.filterString(jsonObject.get("title")+""));
-            news.setTitle(App.filterString(jsonObject.get("title") + ""));
-            news.setNewsType(i);
-            news.setPublishedAt(App.filterString(jsonObject.get("publishedAt") + ""));
-            news.setAuthor(App.filterString(jsonObject.get("author") + ""));
-            news.setDescription(App.filterString(jsonObject.get("description") + ""));
-            news.setUrl(App.filterString(jsonObject.get("url") + ""));
-            news.setUrlToImage(App.filterString(jsonObject.get("urlToImage") + ""));
+            NewsModal newsModal = realm.createObject(NewsModal.class);
+            ImageModal imageModal = realm.createObject(ImageModal.class);
+
+            imageModal.setTitle(App.filterString(jsonObject.get("title") + ""));
+            imageModal.setBase64String("");
+
+            newsModal.setTitle(App.filterString(jsonObject.get("title") + ""));
+            newsModal.setNewsType(i);
+            newsModal.setPublishedAt(App.filterString(jsonObject.get("publishedAt") + ""));
+            newsModal.setAuthor(App.filterString(jsonObject.get("author") + ""));
+            newsModal.setDescription(App.filterString(jsonObject.get("description") + ""));
+            newsModal.setUrl(App.filterString(jsonObject.get("url") + ""));
+            newsModal.setUrlToImage(App.filterString(jsonObject.get("urlToImage") + ""));
 
             jsonObject = (JsonObject) jsonObject.get("source");
-            news.setName(App.filterString(jsonObject.get("name") + ""));
+            newsModal.setName(App.filterString(jsonObject.get("name") + ""));
 
             realm.commitTransaction();
         }
@@ -55,31 +57,30 @@ public class RealmHelper {
 
     public static boolean isImageByteExist(String titleName) {
         Realm realm = Realm.getDefaultInstance();
-        titleName = titleName.replace("\"", "");
+        titleName = App.filterString(titleName);
 
-
-        News news = realm.where(News.class).equalTo("title", titleName).findFirst();
-        Log.e("newsIs", news + "");
-        String string = news.getBase64String();
-        return string == null;
+        ImageModal imageModal = realm.where(ImageModal.class).equalTo("title", titleName).findFirst();
+        String string = imageModal.getBase64String();
+        return string == null || string.isEmpty();
     }
 
-    public static void updateDbWithImage(String titleName, String base64String) {
+    public static void storeBase64String(String titleName, String base64String) {
         Realm realm = Realm.getDefaultInstance();
 
 
        // Log.e("newIs",news+"");
         realm.executeTransaction(realm1 -> {
-            News news = realm1.where(News.class).equalTo("title", titleName).findFirst();
-            news.setBase64String(base64String);
-            Log.e("newNewsIs",news+"");
+            ImageModal imageModal = realm1.where(ImageModal.class).equalTo("title", titleName).findFirst();
+            imageModal.setBase64String(base64String);
+            //Log.e("newNewsIs", imageModal +"");
         });
     }
 
     public static String getBase64String(String titleName) {
         Realm realm = Realm.getDefaultInstance();
-        News news = realm.where(News.class).equalTo("title", titleName).findFirst();
+        titleName = App.filterString(titleName);
+        ImageModal imageModal = realm.where(ImageModal.class).equalTo("title", titleName).findFirst();
 
-        return news.getBase64String();
+        return imageModal.getBase64String();
     }
 }
