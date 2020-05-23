@@ -19,6 +19,7 @@ public class RealmHelper {
         for (JsonElement jsonElement : jsonArray) {
             jsonObject = (JsonObject) jsonElement;
 
+            //Log.e("storeDataInDb",App.filterString(jsonObject.get("title")+""));
             long l = realm.where(NewsModal.class).equalTo("title", App.filterString(jsonObject.get("title") + "")).count();
             //Log.e("result1Is",realmResults.asJSON()+"");
             if (l > 0)
@@ -59,6 +60,7 @@ public class RealmHelper {
         Realm realm = Realm.getDefaultInstance();
         titleName = App.filterString(titleName);
 
+        //Log.e("isImageByteExist",titleName);
         ImageModal imageModal = realm.where(ImageModal.class).equalTo("title", titleName).findFirst();
         String string = imageModal.getBase64String();
         return string == null || string.isEmpty();

@@ -45,6 +45,9 @@ public class BaseActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().setCustomAnimations(R.anim.anim_enter, R.anim.anim_exit)
                 .addToBackStack("")
                 .replace(R.id.frameLayout, fragment).commit();
+
+        if (fragment instanceof HomeFragment)
+            App.newsType = 6;
     }
 
     @Override
@@ -124,6 +127,7 @@ public class BaseActivity extends AppCompatActivity {
             activityBaseBinding.homeImage.setColorFilter(getResources().getColor(R.color.colorBlack));
             activityBaseBinding.categoryImage.setColorFilter(getResources().getColor(R.color.grey5));
             activityBaseBinding.settingImage.setColorFilter(getResources().getColor(R.color.grey5));
+            App.newsType = 6;
         } else if (view == activityBaseBinding.categoryLayout) {
             activityBaseBinding.homeImage.setColorFilter(getResources().getColor(R.color.grey5));
             activityBaseBinding.categoryImage.setColorFilter(getResources().getColor(R.color.colorBlack));

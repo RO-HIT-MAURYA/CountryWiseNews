@@ -24,6 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class App extends Application
 {
     private static String baseUrl = "https://newsapi.org/v2/";
+    public static int newsType;
 
     private static Retrofit retrofit;
     private static Gson gson = new GsonBuilder().create();

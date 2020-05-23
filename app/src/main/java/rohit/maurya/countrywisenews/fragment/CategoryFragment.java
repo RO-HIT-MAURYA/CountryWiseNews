@@ -21,21 +21,26 @@ import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import rohit.maurya.countrywisenews.ApiInterface;
 import rohit.maurya.countrywisenews.App;
+import rohit.maurya.countrywisenews.RealmHelper;
 import rohit.maurya.countrywisenews.ResponseFormat;
 import rohit.maurya.countrywisenews.R;
 import rohit.maurya.countrywisenews.activity.BaseActivity;
 import rohit.maurya.countrywisenews.adapters.RecyclerViewAdapter;
 import rohit.maurya.countrywisenews.databinding.FragmentCategoryBinding;
+import rohit.maurya.countrywisenews.modals.NewsModal;
 
 public class CategoryFragment extends Fragment implements TabLayout.OnTabSelectedListener {
     private View view;
@@ -66,7 +71,7 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
             fragmentCategoryBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false);
             context = getContext();
 
-            View view = getLayoutInflater().inflate(R.layout.loader_layout,null,false);
+            View view = getLayoutInflater().inflate(R.layout.loader_layout, null, false);
             RotateLoading rotateLoading = view.findViewById(R.id.rotateLoading);
             rotateLoading.start();
 
@@ -84,18 +89,11 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
     }
 
     private void setTabLayoutData() {
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("Business");
-        arrayList.add("Entertainment");
-        arrayList.add("Health");
-        arrayList.add("Science");
-        arrayList.add("Sports");
-        arrayList.add("Technology");
+        String[] strings = {"Business", "Entertainment", "Health", "Science", "Sports", "Technology"};
 
-        for (int i=0; i<arrayList.size(); i++) {
+        for (String string : strings) {
             TabLayout.Tab tab = fragmentCategoryBinding.tabLayout.newTab();
-            tab.setText(arrayList.get(i));
-            tab.setTag(i);
+            tab.setText(string);
             fragmentCategoryBinding.tabLayout.addTab(tab);
             fragmentCategoryBinding.tabLayout.addOnTabSelectedListener(this);
         }
@@ -108,51 +106,55 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
         ApiInterface apiInterface = App.createService(ApiInterface.class);
         Call<ResponseFormat> call;
 
+        Realm realm = Realm.getDefaultInstance();
+
         if (businessArray == null) {
             call = apiInterface.getBusinessNews();
-            loadData(call, jsonArray -> {
-                businessArray = jsonArray;
-                businessAdapter = new RecyclerViewAdapter(context,businessArray);
-            });
-        }
-        else if (entertainmentArray == null) {
+            loadData(call, jsonArray -> RealmHelper.storeDataInDb(0, jsonArray, () -> {
+                RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 0).findAll();
+                businessArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
+                businessAdapter = new RecyclerViewAdapter(context, businessArray);
+            }));
+        } else if (entertainmentArray == null) {
             call = apiInterface.getEntertainmentNews();
-            loadData(call, jsonArray -> {
-                entertainmentArray = jsonArray;
-                entertainmentAdapter = new RecyclerViewAdapter(context,entertainmentArray);
-            });
-        }
-        else if (healthArray == null) {
+            loadData(call, jsonArray -> RealmHelper.storeDataInDb(1, jsonArray, () -> {
+                RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 1).findAll();
+                entertainmentArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
+                entertainmentAdapter = new RecyclerViewAdapter(context, entertainmentArray);
+            }));
+        } else if (healthArray == null) {
             call = apiInterface.getHealthNews();
-            loadData(call, jsonArray -> {
-                healthArray = jsonArray;
-                healthAdapter = new RecyclerViewAdapter(context,healthArray);
-            });
-        }
-        else if (scienceArray == null) {
+            loadData(call, jsonArray -> RealmHelper.storeDataInDb(2, jsonArray, () -> {
+                RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 2).findAll();
+                healthArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
+                healthAdapter = new RecyclerViewAdapter(context, healthArray);
+            }));
+        } else if (scienceArray == null) {
             call = apiInterface.getScienceNews();
-            loadData(call, jsonArray -> {
-                scienceArray = jsonArray;
-                scienceAdapter = new RecyclerViewAdapter(context,scienceArray);
-            });
-        }
-        else if (sportsArray == null) {
+            loadData(call, jsonArray -> RealmHelper.storeDataInDb(3, jsonArray, () -> {
+                RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 3).findAll();
+                scienceArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
+                scienceAdapter = new RecyclerViewAdapter(context, scienceArray);
+            }));
+        } else if (sportsArray == null) {
             call = apiInterface.getSportsNews();
-            loadData(call, jsonArray -> {
-                sportsArray = jsonArray;
-                sportsAdapter = new RecyclerViewAdapter(context,sportsArray);
-            });
-        }
-        else if (technologyArray == null) {
+            loadData(call, jsonArray -> RealmHelper.storeDataInDb(4, jsonArray, () -> {
+                RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 4).findAll();
+                sportsArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
+                sportsAdapter = new RecyclerViewAdapter(context, sportsArray);
+            }));
+        } else if (technologyArray == null) {
             call = apiInterface.getTechnologyNews();
-            loadData(call, jsonArray -> {
-                technologyArray = jsonArray;
-                technologyAdapter = new RecyclerViewAdapter(context,technologyArray);
-                ((RotateLoading)dialog.findViewById(R.id.rotateLoading)).stop();
+            loadData(call, jsonArray -> RealmHelper.storeDataInDb(5, jsonArray, () -> {
+                RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 5).findAll();
+                technologyArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
+                technologyAdapter = new RecyclerViewAdapter(context, technologyArray);
+
+                ((RotateLoading) dialog.findViewById(R.id.rotateLoading)).stop();
                 dialog.hide();
                 setTabLayoutData();
                 fragmentCategoryBinding.viewPager.setAdapter(new ViewPagerAdapter());
-            });
+            }));
         }
     }
 
@@ -186,8 +188,7 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
     }
 
     @Override
-    public void onTabSelected(TabLayout.Tab tab)
-    {
+    public void onTabSelected(TabLayout.Tab tab) {
         /*if (tab.getTag() instanceof Integer)
         {
             int i = (int)tab.getTag();
@@ -206,7 +207,8 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
 
             fragmentCategoryBinding.viewPager.setCurrentItem(i);
         }*/
-
+        App.newsType = tab.getPosition();
+        fragmentCategoryBinding.viewPager.setCurrentItem(tab.getPosition());
     }
 
     @Override
