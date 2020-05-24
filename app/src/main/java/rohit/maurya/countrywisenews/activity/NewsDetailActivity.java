@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.app.Dialog;
 import android.graphics.Bitmap;
@@ -45,21 +46,37 @@ import rohit.maurya.countrywisenews.databinding.ActivityNewsDetailBinding;
 public class NewsDetailActivity extends AppCompatActivity {
 
     private Target target;
+    ActivityNewsDetailBinding activityNewsDetailBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityNewsDetailBinding activityNewsDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_news_detail);
-
+        activityNewsDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_news_detail);
 
         int i = getIntent().getIntExtra("int", 0);
 
         JsonArray jsonArray = new JsonParser().parse(getIntent().getStringExtra("jsonArray")).getAsJsonArray();
 
         if (jsonArray != null)
+        {
             activityNewsDetailBinding.viewPager2.setAdapter(new ViewPagerAdapter2(jsonArray));
+            handlePageChangeCallBack(jsonArray);
+            activityNewsDetailBinding.viewPager2.setCurrentItem(i);
+        }
+    }
 
-        activityNewsDetailBinding.viewPager2.setCurrentItem(i);
+    private void handlePageChangeCallBack(JsonArray jsonArray) {
+        activityNewsDetailBinding.viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+
+                JsonObject jsonObject = (JsonObject) jsonArray.get(position);
+                String string = jsonObject.get("title") + "";
+
+                changeStatusBarColor(string);
+            }
+        });
     }
 
     private class ViewPagerAdapter2 extends RecyclerView.Adapter<ViewPagerAdapter2.InnerClass> {
@@ -90,24 +107,20 @@ public class NewsDetailActivity extends AppCompatActivity {
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         holder.imageView.setImageBitmap(bitmap);
                         String string = jsonObject.get("title") + "";
-                        storeImageInDb(string, bitmap);
-                        changeStatusBarColor(bitmap);
+                        storeImageDataInDb(string, bitmap); // it also changes color of status bar
                     }
 
                     @Override
                     public void onBitmapFailed(Exception e, Drawable errorDrawable) {
                         Log.e("failedTo", "loadBitmap");
                         String string = jsonObject.get("title") + "";
+
+
                         string = RealmHelper.getBase64String(string);
                         byte[] bytes = Base64.decode(string, Base64.DEFAULT);
                         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         holder.imageView.setImageBitmap(bitmap);
-                        if (string != null && !string.isEmpty())
-                            changeStatusBarColor(bitmap);
-                        /*Glide.with(NewsDetailActivity.this)
-                                .asBitmap()
-                                .load(bytes)
-                                .into(holder.imageView);*/
+
                         Log.e("base64Is", string + "empty ");
                     }
 
@@ -173,25 +186,28 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void changeStatusBarColor(Bitmap bitmap) {
-        Palette.from(bitmap).generate(palette -> {
-            Log.e("onGenerated", "isExecuted");
-            assert palette != null;
-            //Log.e("colorIs",palette.getDarkMutedColor(getResources().getColor(R.color.colorBlack))+"");
-            //getWindow().setStatusBarColor(palette.getDarkMutedColor(getResources().getColor(R.color.colorPrimaryDark)));
-            getWindow().setStatusBarColor(palette.getDominantColor(getResources().getColor(R.color.colorPrimaryDark)));
-        });
+    private void changeStatusBarColor(String string) {
+        int[] ints = RealmHelper.getColors(string);
+        getWindow().setStatusBarColor(ints[0]);
     }
 
-    private void storeImageInDb(String titleName, Bitmap bitmap) {
+    private void storeImageDataInDb(final String titleName, Bitmap bitmap) {
         if (RealmHelper.isImageByteExist(titleName)) {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] bytes = byteArrayOutputStream.toByteArray();
             String string = Base64.encodeToString(bytes, Base64.DEFAULT);
 
-            titleName = App.filterString(titleName);
-            RealmHelper.storeBase64String(titleName, string);
+            Palette.from(bitmap).generate(palette -> {
+                Log.e("onGenerated", "isExecuted");
+                assert palette != null;
+                //Log.e("colorIs",palette.getDarkMutedColor(getResources().getColor(R.color.colorBlack))+"");
+                //getWindow().setStatusBarColor(palette.getDarkMutedColor(getResources().getColor(R.color.colorPrimaryDark)));
+
+                RealmHelper.storeImageData(titleName, string, palette.getDominantColor(getResources().getColor(R.color.colorPrimaryDark)),
+                        palette.getDarkMutedColor(getResources().getColor(R.color.colorPrimaryDark)),
+                        () -> changeStatusBarColor(titleName));
+            });
         }
     }
 

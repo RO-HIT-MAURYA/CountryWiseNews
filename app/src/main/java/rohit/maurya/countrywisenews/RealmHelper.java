@@ -66,14 +66,18 @@ public class RealmHelper {
         return string == null || string.isEmpty();
     }
 
-    public static void storeBase64String(String titleName, String base64String) {
+    public static void storeImageData(String titleName, String base64String, int vibrantColor, int muteColor, App.DataStoredCallBack dataStoredCallBack) {
+        titleName = App.filterString(titleName);
         Realm realm = Realm.getDefaultInstance();
-
-
-       // Log.e("newIs",news+"");
+        String tempString = titleName;
+        // Log.e("newIs",news+"");
         realm.executeTransaction(realm1 -> {
-            ImageModal imageModal = realm1.where(ImageModal.class).equalTo("title", titleName).findFirst();
+            ImageModal imageModal = realm1.where(ImageModal.class).equalTo("title", tempString).findFirst();
             imageModal.setBase64String(base64String);
+
+            imageModal.setVibrantColor(vibrantColor);
+            imageModal.setMuteColor(muteColor);
+            dataStoredCallBack.dataStoredSuccessfully();
             //Log.e("newNewsIs", imageModal +"");
         });
     }
@@ -82,7 +86,30 @@ public class RealmHelper {
         Realm realm = Realm.getDefaultInstance();
         titleName = App.filterString(titleName);
         ImageModal imageModal = realm.where(ImageModal.class).equalTo("title", titleName).findFirst();
+        if (imageModal == null)
+            return "";
 
-        return imageModal.getBase64String();
+        titleName = imageModal.getBase64String();
+        if (titleName == null || titleName.isEmpty())
+            return "";
+        else
+            return imageModal.getBase64String();
+    }
+
+    public static int[] getColors(String titleName) {
+        int[] ints = new int[2];
+        Realm realm = Realm.getDefaultInstance();
+        titleName = App.filterString(titleName);
+
+        ImageModal imageModal = realm.where(ImageModal.class).equalTo("title", titleName).findFirst();
+        if (imageModal == null)
+            return ints;
+        else
+        {
+            ints[0] = imageModal.getVibrantColor();
+            ints[1] = imageModal.getMuteColor();
+
+            return ints;
+        }
     }
 }

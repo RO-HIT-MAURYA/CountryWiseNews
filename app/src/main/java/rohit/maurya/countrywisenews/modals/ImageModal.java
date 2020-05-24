@@ -6,6 +6,8 @@ public class ImageModal extends RealmObject
 {
     private String title;
     private String base64String;
+    private int vibrantColor;
+    private int muteColor;
 
     public String getTitle() {
         return title;
@@ -21,5 +23,21 @@ public class ImageModal extends RealmObject
 
     public void setBase64String(String base64String) {
         this.base64String = base64String;
+    }
+
+    public int getVibrantColor() {
+        return vibrantColor;
+    }
+
+    public void setVibrantColor(int vibrantColor) {
+        this.vibrantColor = vibrantColor;
+    }
+
+    public int getMuteColor() {
+        return muteColor;
+    }
+
+    public void setMuteColor(int muteColor) {
+        this.muteColor = muteColor;
     }
 }
