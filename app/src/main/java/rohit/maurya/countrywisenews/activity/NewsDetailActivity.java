@@ -46,7 +46,17 @@ import rohit.maurya.countrywisenews.databinding.ActivityNewsDetailBinding;
 public class NewsDetailActivity extends AppCompatActivity {
 
     private Target target;
-    ActivityNewsDetailBinding activityNewsDetailBinding;
+    private ActivityNewsDetailBinding activityNewsDetailBinding;
+    private JsonArray jsonArray;
+    private ViewPager2.OnPageChangeCallback onPageChangeCallback = new ViewPager2.OnPageChangeCallback() {
+        @Override
+        public void onPageSelected(int position) {
+            super.onPageSelected(position);
+            JsonObject jsonObject = (JsonObject) jsonArray.get(position);
+            String string = jsonObject.get("title") + "";
+            changeStatusBarColor(string);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,36 +65,16 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         int i = getIntent().getIntExtra("int", 0);
 
-        JsonArray jsonArray = new JsonParser().parse(getIntent().getStringExtra("jsonArray")).getAsJsonArray();
+        jsonArray = new JsonParser().parse(getIntent().getStringExtra("jsonArray")).getAsJsonArray();
 
-        if (jsonArray != null)
-        {
-            activityNewsDetailBinding.viewPager2.setAdapter(new ViewPagerAdapter2(jsonArray));
-            handlePageChangeCallBack(jsonArray);
+        if (jsonArray != null) {
+            activityNewsDetailBinding.viewPager2.setAdapter(new ViewPagerAdapter2());
             activityNewsDetailBinding.viewPager2.setCurrentItem(i);
+            activityNewsDetailBinding.viewPager2.registerOnPageChangeCallback(onPageChangeCallback);
         }
-    }
-
-    private void handlePageChangeCallBack(JsonArray jsonArray) {
-        activityNewsDetailBinding.viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-
-                JsonObject jsonObject = (JsonObject) jsonArray.get(position);
-                String string = jsonObject.get("title") + "";
-
-                changeStatusBarColor(string);
-            }
-        });
     }
 
     private class ViewPagerAdapter2 extends RecyclerView.Adapter<ViewPagerAdapter2.InnerClass> {
-        private JsonArray jsonArray = new JsonArray();
-
-        private ViewPagerAdapter2(JsonArray jsonArray) {
-            this.jsonArray = jsonArray;
-        }
 
         @NonNull
         @Override
@@ -114,7 +104,6 @@ public class NewsDetailActivity extends AppCompatActivity {
                     public void onBitmapFailed(Exception e, Drawable errorDrawable) {
                         Log.e("failedTo", "loadBitmap");
                         String string = jsonObject.get("title") + "";
-
 
                         string = RealmHelper.getBase64String(string);
                         byte[] bytes = Base64.decode(string, Base64.DEFAULT);
@@ -206,7 +195,7 @@ public class NewsDetailActivity extends AppCompatActivity {
 
                 RealmHelper.storeImageData(titleName, string, palette.getDominantColor(getResources().getColor(R.color.colorPrimaryDark)),
                         palette.getDarkMutedColor(getResources().getColor(R.color.colorPrimaryDark)),
-                        () -> changeStatusBarColor(titleName));
+                        () -> onPageChangeCallback.onPageSelected(activityNewsDetailBinding.viewPager2.getCurrentItem()));
             });
         }
     }
