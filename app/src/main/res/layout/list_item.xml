@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -17,10 +17,22 @@
         android:fontFamily="casual"
         android:textStyle="italic" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="?actionBarSize"
+        android:layout_height="?actionBarSize"
+        android:src="@drawable/ic_bookmark_border_black_24dp"
+        android:clickable="true"
+        android:background="@drawable/clickable_bg"
+        android:tint="@color/colorLine"
+        android:layout_alignParentEnd="true"
+        android:padding="16dp"/>
+
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/dayTextView"
         android:textColor="@color/grey3"
         android:layout_margin="9dp"
         android:text="News Title"
@@ -33,6 +45,8 @@
         android:layout_height="wrap_content"
         android:text="author name"
         android:textColor="@color/grey4"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/titleTextView"
         android:fontFamily="sans-serif"
         android:textStyle="italic"
         android:layout_margin="9dp"
@@ -41,6 +55,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.4dp"
+        android:layout_alignParentBottom="true"
         android:background="@color/colorBlack"/>
 
-</LinearLayout>
+</RelativeLayout>

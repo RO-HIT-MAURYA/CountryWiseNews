@@ -29,7 +29,7 @@
             android:layout_height="?actionBarSize"
             android:layout_alignParentBottom="true"
             android:background="@color/colorBack"
-            android:weightSum="3">
+            android:weightSum="4">
 
             <LinearLayout
                 android:id="@+id/homeLayout"
@@ -81,6 +81,33 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Category"
+                    android:fontFamily="casual"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bookMarkLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:background="@drawable/clickable_bg"
+                android:onClick="onBottomBarClick"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="4dp">
+
+                <ImageView
+                    android:id="@+id/bookMarkImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_bookmark_border_black_24dp"
+                    android:tint="@color/grey5"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bookmark"
                     android:fontFamily="casual"/>
 
             </LinearLayout>

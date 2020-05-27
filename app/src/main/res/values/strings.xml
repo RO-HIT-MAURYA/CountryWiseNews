@@ -3,4 +3,7 @@
 
     <string name="autoLink">By logging in you agree to Yapsody\'s <a href="https://www.yapsody.com/ticketing/terms-of-use/">Terms of Service</a> and <a style="color: #A8A9A7" href="https://www.yapsody.com/ticketing/privacy-policy/">Privacy Policy</a></string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
