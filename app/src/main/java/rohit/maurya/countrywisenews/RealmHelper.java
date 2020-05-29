@@ -46,6 +46,8 @@ public class RealmHelper {
             jsonObject = (JsonObject) jsonObject.get("source");
             newsModal.setName(App.filterString(jsonObject.get("name") + ""));
 
+            newsModal.setBookMark(false);
+
             realm.commitTransaction();
         }
 
@@ -102,14 +104,20 @@ public class RealmHelper {
         titleName = App.filterString(titleName);
 
         ImageModal imageModal = realm.where(ImageModal.class).equalTo("title", titleName).findFirst();
-        if (imageModal == null)
-            return ints;
-        else
-        {
+        if (imageModal != null) {
             ints[0] = imageModal.getVibrantColor();
             ints[1] = imageModal.getMuteColor();
 
-            return ints;
         }
+        return ints;
+    }
+
+    public static void updateBookmark(String titleName, boolean bool) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(realm1 -> {
+            NewsModal newsModal = realm1.where(NewsModal.class).equalTo("title", titleName).findFirst();
+            if (newsModal != null)
+                newsModal.setBookMark(bool);
+        });
     }
 }

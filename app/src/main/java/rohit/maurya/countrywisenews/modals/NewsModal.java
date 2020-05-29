@@ -14,6 +14,7 @@ public class NewsModal extends RealmObject
     private String name;
     private String url;
     private String urlToImage;
+    private boolean bookMark;
 
     public String getTitle() {
         return title;
@@ -77,5 +78,13 @@ public class NewsModal extends RealmObject
 
     public void setUrlToImage(String urlToImage) {
         this.urlToImage = urlToImage;
+    }
+
+    public boolean getBookMark() {
+        return bookMark;
+    }
+
+    public void setBookMark(boolean bookMark) {
+        this.bookMark = bookMark;
     }
 }
