@@ -54,6 +54,7 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
     private JsonArray technologyArray;// = new JsonArray();
     private RecyclerViewAdapter businessAdapter, entertainmentAdapter, healthAdapter, scienceAdapter, sportsAdapter, technologyAdapter;
     private Dialog dialog;
+    private ViewPagerAdapter viewPagerAdapter;
 
     public static CategoryFragment newInstance() {
         CategoryFragment fragment = new CategoryFragment();
@@ -84,6 +85,38 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
 
             initializeArray();
 
+        }
+        if (viewPagerAdapter != null)
+        {
+            Realm realm = Realm.getDefaultInstance();
+            RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 0).findAll();
+            businessArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
+            businessAdapter = new RecyclerViewAdapter(context, businessArray);
+
+            realmResults = realm.where(NewsModal.class).equalTo("newsType", 1).findAll();
+            entertainmentArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
+            entertainmentAdapter = new RecyclerViewAdapter(context, entertainmentArray);
+
+            realmResults = realm.where(NewsModal.class).equalTo("newsType", 2).findAll();
+            healthArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
+            healthAdapter = new RecyclerViewAdapter(context, healthArray);
+
+            realmResults = realm.where(NewsModal.class).equalTo("newsType", 3).findAll();
+            scienceArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
+            scienceAdapter = new RecyclerViewAdapter(context, scienceArray);
+
+            realmResults = realm.where(NewsModal.class).equalTo("newsType", 4).findAll();
+            sportsArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
+            sportsAdapter = new RecyclerViewAdapter(context, sportsArray);
+
+            realmResults = realm.where(NewsModal.class).equalTo("newsType", 5).findAll();
+            technologyArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
+            technologyAdapter = new RecyclerViewAdapter(context, technologyArray);
+
+            viewPagerAdapter = new ViewPagerAdapter();
+            fragmentCategoryBinding.viewPager.setAdapter(viewPagerAdapter);
+
+            Log.e("condition","isTrue");
         }
         return fragmentCategoryBinding.getRoot();
     }
@@ -153,7 +186,8 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
                 ((RotateLoading) dialog.findViewById(R.id.rotateLoading)).stop();
                 dialog.hide();
                 setTabLayoutData();
-                fragmentCategoryBinding.viewPager.setAdapter(new ViewPagerAdapter());
+                viewPagerAdapter = new ViewPagerAdapter();
+                fragmentCategoryBinding.viewPager.setAdapter(viewPagerAdapter);
             }));
         }
     }

@@ -48,6 +48,7 @@ public class HomeFragment extends Fragment {
             getHomeNews();
         }
 
+        setAdapter();
         return fragmentHomeBinding.getRoot();
     }
 
