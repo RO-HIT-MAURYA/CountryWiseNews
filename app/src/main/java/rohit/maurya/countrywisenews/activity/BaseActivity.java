@@ -2,11 +2,13 @@ package rohit.maurya.countrywisenews.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import rohit.maurya.countrywisenews.App;
 import rohit.maurya.countrywisenews.R;
@@ -47,6 +50,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private long l;
+
     public void fragmentLoader(Fragment fragment) {
 
         if (fragment.isVisible())
@@ -60,12 +64,11 @@ public class BaseActivity extends AppCompatActivity {
                 .addToBackStack("")
                 .replace(R.id.frameLayout, fragment).commit();
 
-        if (fragment instanceof HomeFragment)
-        {
+        if (fragment instanceof HomeFragment) {
             App.newsType = 6;
             int count = fragmentManager.getBackStackEntryCount();
             if (count > 1)
-                for (int i=0; i<count; i++)
+                for (int i = 0; i < count; i++)
                     onBackPressed();
         }
     }
@@ -91,15 +94,12 @@ public class BaseActivity extends AppCompatActivity {
         }, 120);
     }
 
-    /*private void onClick(View view) {
-        if (view == activityBaseBinding.button)
+    public void onViewModeClick(View view) {
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         else
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-
-        startActivity(new Intent(this,BaseActivity.class));
-        finish();
-    }*/
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

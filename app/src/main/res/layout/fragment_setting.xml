@@ -11,7 +11,8 @@
         <FrameLayout
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize">
+            android:layout_height="?actionBarSize"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -55,26 +56,32 @@
 
         </FrameLayout>
 
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:layout_below="@id/fL">
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_centerVertical="true"
                 android:fontFamily="sans-serif-medium"
                 android:text="Switch to" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tV"
+                android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                android:gravity="center"
+                android:layout_toEndOf="@id/textView"
+                android:background="@drawable/clickable_bg"
+                android:clickable="true"
+                android:onClick="onViewModeClick"
+                android:gravity="end|center_vertical"
                 android:layout_gravity="end"
                 android:text="Dark Mode"/>
 
-        </FrameLayout>
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"

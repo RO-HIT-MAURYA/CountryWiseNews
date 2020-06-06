@@ -18,15 +18,22 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
-        <activity android:name=".activity.NewsDetailActivity"></activity>
-        <activity android:name=".activity.BaseActivity" />
-        <activity android:name=".activity.SplashScreenActivity">
+
+        <activity android:name=".activity.NewsDetailActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.BaseActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.SplashScreenActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

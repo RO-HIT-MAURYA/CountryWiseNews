@@ -64,6 +64,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         activityNewsDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_news_detail);
 
         int i = getIntent().getIntExtra("int", 0);
+        Log.e("receivedI",i+"");
 
         jsonArray = new JsonParser().parse(getIntent().getStringExtra("jsonArray")).getAsJsonArray();
 
