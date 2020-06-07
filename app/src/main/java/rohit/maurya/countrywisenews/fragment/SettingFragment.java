@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -34,10 +35,10 @@ public class SettingFragment extends Fragment {
         if (view == null)
             view = inflater.inflate(R.layout.fragment_setting, container, false);
 
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO)
-            ((TextView)view.findViewById(R.id.tV)).setText("Dark Mode");
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+            ((SwitchCompat)view.findViewById(R.id.sW)).setChecked(true);
         else
-            ((TextView)view.findViewById(R.id.tV)).setText("Light Mode");
+            ((SwitchCompat)view.findViewById(R.id.sW)).setChecked(false);
 
         return view;
     }

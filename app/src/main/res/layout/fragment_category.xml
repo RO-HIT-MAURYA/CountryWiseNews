@@ -7,7 +7,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragment.CategoryFragment">
+        tools:context=".fragment.CategoryFragment"
+        android:background="@color/bg">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
@@ -17,8 +18,8 @@
             app:tabIndicatorColor="@color/colorAccent"
             app:tabIndicatorHeight="3dp"
             app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/colorWhite"
-            app:tabTextColor="@color/grey2"/>
+            app:tabSelectedTextColor="@color/selectedTint"
+            app:tabTextColor="@color/iconTint"/>
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"

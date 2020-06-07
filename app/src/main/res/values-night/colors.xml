@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimary">#2B3038</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#000000</color>
+    <color name="colorAccent">#61666E</color>
 
-    <color name="colorLine">#464646</color>
-    <color name="colorBack">#FAFAFA</color>
+    <color name="bottomBg">#101010</color>
+    <color name="topBg">#000000</color>
+    <color name="bg">#202020</color>
 
-    <color name="colorWhite">#FFFFFF</color>
-    <color name="colorBlack">#000000</color>
+    <color name="titleColor">#F2F2F2</color>
+    <color name="textColor">#F1F1F1</color>
+    <color name="bodyColor">#F3F3F3</color>
+    <color name="iconTint">#F4F4F4</color>
+    <color name="selectedTint">#FFFFFF</color>
+    <color name="dayColor">#F7F7F7</color>
 
-    <color name="grey1">#3C3F41</color>
-    <color name="grey2">#313335</color>
-    <color name="grey3">#232323</color>
-    <color name="grey4">#2B2B2B</color>
-    <color name="grey5">#B2B2B2</color>
-    <color name="grey6">#646464</color>
+    <color name="lineColor">#F5F5F5</color>
+    <color name="categoryColor">#F6F6F6</color>
+
+    <color name="vColor">#F8F8F8</color>
 
 </resources>

@@ -163,11 +163,13 @@ public class BaseActivity extends AppCompatActivity {
         for (int i = 0; i < activityBaseBinding.linearLayout.getChildCount(); i++) {
             linearLayout = (LinearLayout) activityBaseBinding.linearLayout.getChildAt(i);
             imageView = (ImageView) linearLayout.getChildAt(0);
-            imageView.setColorFilter(getResources().getColor(R.color.grey5));
+            imageView.setAlpha(0.6f);
+            imageView.setColorFilter(getResources().getColor(R.color.iconTint));
         }
 
         linearLayout = (LinearLayout) view;
         imageView = (ImageView) linearLayout.getChildAt(0);
-        imageView.setColorFilter(getResources().getColor(R.color.colorBlack));
+        imageView.setAlpha(1f);
+        imageView.setColorFilter(getResources().getColor(R.color.selectedTint));
     }
 }

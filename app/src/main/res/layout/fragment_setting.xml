@@ -6,7 +6,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="19dp">
+        android:padding="19dp"
+        android:background="@color/bg">
 
         <FrameLayout
             android:id="@+id/frameLayout"
@@ -47,41 +48,37 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:fontFamily="sans-serif-medium"
-                android:text="Notification" />
+                android:text="Notification"
+                android:textColor="@color/titleColor"/>
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="end" />
 
         </FrameLayout>
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:layout_below="@id/fL">
 
             <TextView
-                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
                 android:fontFamily="sans-serif-medium"
-                android:text="Switch to" />
+                android:text="Dark Mode"
+                android:textColor="@color/titleColor"/>
 
-            <TextView
-                android:id="@+id/tV"
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/sW"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                android:layout_toEndOf="@id/textView"
-                android:background="@drawable/clickable_bg"
-                android:clickable="true"
+                android:layout_height="match_parent"
                 android:onClick="onViewModeClick"
-                android:gravity="end|center_vertical"
-                android:layout_gravity="end"
-                android:text="Dark Mode"/>
+                android:layout_gravity="end" />
 
-        </RelativeLayout>
+        </FrameLayout>
 
         <TextView
             android:layout_width="wrap_content"

@@ -1,50 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite">
+    android:background="@color/bg"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorWhite"
-        android:orientation="vertical">
+        android:layout_height="275dp"
+        android:background="@drawable/placeholder"
+        android:scaleType="fitXY" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="275dp"
-            android:background="@drawable/placeholder"
-            android:scaleType="fitXY" />
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:textColor="@color/titleColor"
+        android:fontFamily="sans-serif-black"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/titleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="25dp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-black" />
+    <TextView
+        android:id="@+id/bodyTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:textColor="@color/bodyColor"
+        android:layout_marginBottom="21dp"
+        android:fontFamily="sans-serif-condensed" />
 
-        <TextView
-            android:id="@+id/bodyTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="21dp"
-            android:fontFamily="sans-serif-condensed"/>
+    <TextView
+        android:id="@+id/extraTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:textColor="@color/vColor"
+        android:layout_marginBottom="12dp"
+        android:clickable="true"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textStyle="italic" />
 
-        <TextView
-            android:id="@+id/extraTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="12dp"
-            android:clickable="true"
-            android:textStyle="italic"
-            android:fontFamily="sans-serif-condensed-medium"/>
-
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>

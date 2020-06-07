@@ -6,12 +6,14 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/bg">
 
-        <androidx.cardview.widget.CardView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            app:cardElevation="4dp">
+            android:background="@color/topBg"
+            android:elevation="4dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -19,11 +21,11 @@
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="center"
                 android:text="Saved News"
-                android:textColor="@color/grey6"
+                android:textColor="@color/titleColor"
                 android:textSize="19sp"
                 android:textStyle="bold" />
 
-        </androidx.cardview.widget.CardView>
+        </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

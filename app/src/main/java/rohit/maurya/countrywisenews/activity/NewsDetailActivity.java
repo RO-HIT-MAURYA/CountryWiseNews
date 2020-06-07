@@ -2,6 +2,7 @@ package rohit.maurya.countrywisenews.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.databinding.DataBindingUtil;
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
@@ -196,7 +197,11 @@ public class NewsDetailActivity extends AppCompatActivity {
 
     private void changeStatusBarColor(String string) {
         int[] ints = RealmHelper.getColors(string);
-        getWindow().setStatusBarColor(ints[0]);
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
+            getWindow().setStatusBarColor(ints[1]);
+        else
+            getWindow().setStatusBarColor(ints[0]);
+
     }
 
     private void storeImageDataInDb(final String titleName, Bitmap bitmap) {
@@ -232,7 +237,7 @@ public class NewsDetailActivity extends AppCompatActivity {
             @Override
             public void updateDrawState(@NonNull TextPaint ds) {
                 super.updateDrawState(ds);
-                ds.setColor(getResources().getColor(R.color.colorBlack));
+                ds.setColor(getResources().getColor(R.color.lineColor));
             }
         };
 
@@ -244,6 +249,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     public void startWebView(String string) {
 
         View view = LayoutInflater.from(this).inflate(R.layout.web_view_container, null, false);
+        view.findViewById(R.id.linearLayout).setVisibility(View.VISIBLE);
         WebView webView = view.findViewById(R.id.webView);// new WebView(context);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.clearHistory();
