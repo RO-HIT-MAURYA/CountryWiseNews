@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -57,6 +58,7 @@ public class NewsDetailActivity extends AppCompatActivity {
             changeStatusBarColor(string);
         }
     };
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         activityNewsDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_news_detail);
 
         int i = getIntent().getIntExtra("int", 0);
-        Log.e("receivedI",i+"");
+        Log.e("receivedI", i + "");
 
         jsonArray = new JsonParser().parse(getIntent().getStringExtra("jsonArray")).getAsJsonArray();
 
@@ -73,6 +75,22 @@ public class NewsDetailActivity extends AppCompatActivity {
             activityNewsDetailBinding.viewPager2.setCurrentItem(i);
             activityNewsDetailBinding.viewPager2.registerOnPageChangeCallback(onPageChangeCallback);
         }
+
+        startDialogListener();
+    }
+
+    private Handler handler = new Handler();
+    private Runnable runnable;
+    private void startDialogListener() {
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                handler.postDelayed(this, 1230);
+                if (dialog != null && !dialog.isShowing())
+                    ((WebView) dialog.findViewById(R.id.webView)).loadUrl("");
+            }
+        };
+        runnable.run();
     }
 
     private class ViewPagerAdapter2 extends RecyclerView.Adapter<ViewPagerAdapter2.InnerClass> {
@@ -119,7 +137,7 @@ public class NewsDetailActivity extends AppCompatActivity {
 
                     }
                 };
-                Picasso.get().load(string).into(target);
+                Picasso.get().load(string).placeholder(R.drawable.placeholder).error(R.drawable.placeholder).into(target);
             }
             //Picasso.get().load(string).into(holder.imageView);
 
@@ -243,11 +261,19 @@ public class NewsDetailActivity extends AppCompatActivity {
         });
 
         webView.loadUrl(string);
-
-        Dialog dialog = new Dialog(this);
+        //webView.loadUrl("https://www.youtube.com/watch?v=kkHzKD_dgV0");
+        //webView.loadUrl("https://timesofindia.indiatimes.com/india/india-coronavirus-cases-india-overtakes-spain-5th-highest-in-world/articleshow/76240195.cms?from=mdr");
+        dialog = new Dialog(this);
         dialog.setContentView(view);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.argb(50, 0, 0, 0)));
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         dialog.show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (handler != null && runnable != null)
+            handler.removeCallbacks(runnable);
     }
 }

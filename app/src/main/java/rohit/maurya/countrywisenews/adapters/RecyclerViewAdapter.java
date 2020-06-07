@@ -108,7 +108,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(context, NewsDetailActivity.class);
                 intent.putExtra("int", (int) view.getTag());
-                Log.e("activityIs", (int) view.getTag() + "");
+                //Log.e("activityIs", (int) view.getTag() + "");
                 intent.putExtra("jsonArray", jsonArray + "");
                 Log.e("started", jsonArray + "");
                 context.startActivity(intent);
