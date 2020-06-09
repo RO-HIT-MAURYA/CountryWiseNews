@@ -6,8 +6,8 @@
         android:id="@+id/menu_jodi_search"
         android:icon="@drawable/ic_baseline_search_24"
         android:title="Search"
-        app:actionViewClass="android.widget.SearchView"
-        app:iconTint="@color/topBg"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:iconTint="@color/iconTint"
         app:showAsAction="always" />
 
 </menu>

@@ -31,7 +31,6 @@
                 android:src="@drawable/ic_baseline_search_24"
                 android:layout_gravity="end"
                 android:tint="@color/titleColor"
-                android:tag="bookMark"
                 android:onClick="onSearchIconClick"
                 android:background="@drawable/clickable_bg"/>
 

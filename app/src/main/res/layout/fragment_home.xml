@@ -32,7 +32,6 @@
                 android:layout_gravity="end"
                 android:tint="@color/titleColor"
                 android:onClick="onSearchIconClick"
-                android:tag="home"
                 android:background="@drawable/clickable_bg"/>
 
         </FrameLayout>

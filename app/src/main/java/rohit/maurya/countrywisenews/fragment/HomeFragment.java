@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void setAdapter() {
+    public void setAdapter() {
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType",6).findAll();

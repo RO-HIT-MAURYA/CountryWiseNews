@@ -1,6 +1,7 @@
 package rohit.maurya.countrywisenews.activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.databinding.DataBindingUtil;
@@ -149,13 +150,20 @@ public class BaseActivity extends AppCompatActivity {
         imageView.setColorFilter(getResources().getColor(R.color.selectedTint));
     }
 
-    public void onSearchIconClick(View view)
-    {
-        Log.e("searchIcon","isClicked");
-        String string = view.getTag()+"";
-        Intent intent = new Intent(this,SearchActivity.class);
+    public void onSearchIconClick(View view) {
+        Intent intent = new Intent(this, SearchActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("tag",string);
-        startActivity(intent);
+        startActivityForResult(intent, 31);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("re", "called");
+
+        if (homeFragment != null && homeFragment.isVisible())
+            homeFragment.setAdapter();
+        else if (bookMarkFragment != null && bookMarkFragment.isVisible())
+            bookMarkFragment.setAdapter();
     }
 }

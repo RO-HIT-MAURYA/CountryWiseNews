@@ -5,17 +5,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.app.Activity;
 import android.os.Bundle;
+
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.SearchView;
-
+import android.widget.LinearLayout;
+import androidx.appcompat.widget.SearchView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import io.realm.Realm;
@@ -69,6 +68,15 @@ public class SearchActivity extends AppCompatActivity {
         //searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
         searchView.setFocusable(true);
         searchView.setIconified(false);
+        searchView.setQueryHint("Search here");
+
+        LinearLayout linearLayout = (LinearLayout) searchView.getChildAt(0);
+        linearLayout = (LinearLayout) linearLayout.getChildAt(2);
+        linearLayout = (LinearLayout) linearLayout.getChildAt(1);
+        
+        SearchView.SearchAutoComplete autoComplete = (androidx.appcompat.widget.SearchView.SearchAutoComplete) linearLayout.getChildAt(0);
+        autoComplete.setHintTextColor(getResources().getColor(R.color.vColor));
+        autoComplete.setTextColor(getResources().getColor(R.color.lineColor));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -101,5 +109,11 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         setAdapter(jsonArray);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(Activity.RESULT_OK);
+        super.onBackPressed();
     }
 }

@@ -46,7 +46,7 @@ public class BookMarkFragment extends Fragment
         return fragmentBookmarkBinding.getRoot();
     }
 
-    private void setAdapter() {
+    public void setAdapter() {
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("bookMark",true).findAll();
