@@ -20,6 +20,7 @@ import rohit.maurya.countrywisenews.RealmHelper;
 import rohit.maurya.countrywisenews.activity.NewsDetailActivity;
 import rohit.maurya.countrywisenews.R;
 import rohit.maurya.countrywisenews.activity.BaseActivity;
+import rohit.maurya.countrywisenews.activity.SearchActivity;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.InnerClass> {
     private JsonArray jsonArray;
@@ -33,7 +34,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @NonNull
     @Override
     public InnerClass onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = ((BaseActivity) context).getLayoutInflater().inflate(R.layout.list_item, parent, false);
+        View view;
+        if (context instanceof BaseActivity)
+            view = ((BaseActivity) context).getLayoutInflater().inflate(R.layout.list_item, parent, false);
+        else
+            view = ((SearchActivity) context).getLayoutInflater().inflate(R.layout.list_item, parent, false);
         return new RecyclerViewAdapter.InnerClass(view);
     }
 

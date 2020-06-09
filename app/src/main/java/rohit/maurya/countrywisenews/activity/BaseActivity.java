@@ -101,30 +101,6 @@ public class BaseActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int i = item.getItemId();
-        if (i == R.id.day_night) {
-            String string = item.getTitle().toString();
-            if (string.equalsIgnoreCase("day mode")) {
-                item.setTitle("Night Mode");
-                setTheme(android.R.style.Theme_Light);
-            } else {
-                item.setTitle("day mode");
-                setTheme(android.R.style.ThemeOverlay_Material_Dark);
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     public void onBottomBarClick(View view) {
         if (homeFragment.isVisible() && view == activityBaseBinding.homeLayout)
             return;
@@ -171,5 +147,15 @@ public class BaseActivity extends AppCompatActivity {
         imageView = (ImageView) linearLayout.getChildAt(0);
         imageView.setAlpha(1f);
         imageView.setColorFilter(getResources().getColor(R.color.selectedTint));
+    }
+
+    public void onSearchIconClick(View view)
+    {
+        Log.e("searchIcon","isClicked");
+        String string = view.getTag()+"";
+        Intent intent = new Intent(this,SearchActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("tag",string);
+        startActivity(intent);
     }
 }
