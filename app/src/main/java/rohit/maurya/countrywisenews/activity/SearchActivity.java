@@ -1,21 +1,31 @@
 package rohit.maurya.countrywisenews.activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import androidx.appcompat.widget.SearchView;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -52,9 +62,9 @@ public class SearchActivity extends AppCompatActivity {
     private void setAdapter(JsonArray jsonArray) {
 
         if (jsonArray.size() == 0)
-            activitySearchBinding.recyclerView.setVisibility(View.GONE);
+            activitySearchBinding.textView.setVisibility(View.VISIBLE);
         else
-            activitySearchBinding.recyclerView.setVisibility(View.VISIBLE);
+            activitySearchBinding.textView.setVisibility(View.GONE);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         activitySearchBinding.recyclerView.setLayoutManager(linearLayoutManager);
@@ -73,7 +83,7 @@ public class SearchActivity extends AppCompatActivity {
         LinearLayout linearLayout = (LinearLayout) searchView.getChildAt(0);
         linearLayout = (LinearLayout) linearLayout.getChildAt(2);
         linearLayout = (LinearLayout) linearLayout.getChildAt(1);
-        
+
         SearchView.SearchAutoComplete autoComplete = (androidx.appcompat.widget.SearchView.SearchAutoComplete) linearLayout.getChildAt(0);
         autoComplete.setHintTextColor(getResources().getColor(R.color.vColor));
         autoComplete.setTextColor(getResources().getColor(R.color.lineColor));
@@ -109,6 +119,29 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         setAdapter(jsonArray);
+    }
+
+    public void onMicClick(View view) {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        //intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to search");
+        startActivityForResult(intent, 31);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.e("intercepted", "false");
+        if (resultCode == RESULT_OK) {
+            Log.e("intercepted", "true");
+            if (data != null) {
+                ArrayList<String> arrayList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if (arrayList.size() > 0)
+                    searchView.setQuery(arrayList.get(0), false);
+            }
+        }
     }
 
     @Override
