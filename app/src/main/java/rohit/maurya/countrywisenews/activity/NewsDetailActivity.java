@@ -69,19 +69,22 @@ public class NewsDetailActivity extends AppCompatActivity {
         int i = getIntent().getIntExtra("int", 0);
         Log.e("receivedI", i + "");
 
-        jsonArray = new JsonParser().parse(getIntent().getStringExtra("jsonArray")).getAsJsonArray();
+        String string = getIntent().getStringExtra("jsonArray");
+        if (string != null)
+            jsonArray = new JsonParser().parse(string).getAsJsonArray();
+        else
+            jsonArray = SearchActivity.subJsonArray;
 
-        if (jsonArray != null) {
-            activityNewsDetailBinding.viewPager2.setAdapter(new ViewPagerAdapter2());
-            activityNewsDetailBinding.viewPager2.setCurrentItem(i);
-            activityNewsDetailBinding.viewPager2.registerOnPageChangeCallback(onPageChangeCallback);
-        }
+        activityNewsDetailBinding.viewPager2.setAdapter(new ViewPagerAdapter2());
+        activityNewsDetailBinding.viewPager2.setCurrentItem(i);
+        activityNewsDetailBinding.viewPager2.registerOnPageChangeCallback(onPageChangeCallback);
 
         startDialogListener();
     }
 
     private Handler handler = new Handler();
     private Runnable runnable;
+
     private void startDialogListener() {
         runnable = new Runnable() {
             @Override
@@ -207,7 +210,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     private void storeImageDataInDb(final String titleName, Bitmap bitmap) {
         if (RealmHelper.isImageByteExist(titleName)) {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            bitmap.compress(Bitmap.CompressFormat.WEBP, 100, byteArrayOutputStream);
             byte[] bytes = byteArrayOutputStream.toByteArray();
             String string = Base64.encodeToString(bytes, Base64.DEFAULT);
 

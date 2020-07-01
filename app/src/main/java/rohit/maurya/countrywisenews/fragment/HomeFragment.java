@@ -56,8 +56,7 @@ public class HomeFragment extends Fragment {
         ApiInterface apiInterface = App.createService(ApiInterface.class);
 
         Call<ResponseFormat> call = apiInterface.getTopNews();
-        call.enqueue(new Callback<ResponseFormat>()
-        {
+        call.enqueue(new Callback<ResponseFormat>() {
             @Override
             public void onResponse(Call<ResponseFormat> call, Response<ResponseFormat> response) {
                 if (response.isSuccessful()) {
@@ -80,13 +79,13 @@ public class HomeFragment extends Fragment {
     public void setAdapter() {
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType",6).findAll();
+        RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 6).findAll();
         realmResults = realmResults.sort("publishedAt", Sort.DESCENDING);
         JsonArray jsonArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         fragmentHomeBinding.recyclerView.setLayoutManager(linearLayoutManager);
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(context,jsonArray);
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(context, jsonArray, false);
         fragmentHomeBinding.recyclerView.setAdapter(recyclerViewAdapter);
     }
 }

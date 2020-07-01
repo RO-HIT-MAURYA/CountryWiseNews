@@ -25,10 +25,12 @@ import rohit.maurya.countrywisenews.activity.SearchActivity;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.InnerClass> {
     private JsonArray jsonArray;
     private Context context;
+    private static boolean fromSearch;
 
-    public RecyclerViewAdapter(Context context, JsonArray jsonArray) {
+    public RecyclerViewAdapter(Context context, JsonArray jsonArray, boolean fromSearch) {
         this.context = context;
         this.jsonArray = jsonArray;
+        RecyclerViewAdapter.fromSearch = fromSearch;
     }
 
     @NonNull
@@ -114,7 +116,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Intent intent = new Intent(context, NewsDetailActivity.class);
                 intent.putExtra("int", (int) view.getTag());
                 //Log.e("activityIs", (int) view.getTag() + "");
-                intent.putExtra("jsonArray", jsonArray + "");
+                if (!fromSearch)
+                    intent.putExtra("jsonArray", jsonArray + "");
                 Log.e("started", jsonArray + "");
                 context.startActivity(intent);
             });

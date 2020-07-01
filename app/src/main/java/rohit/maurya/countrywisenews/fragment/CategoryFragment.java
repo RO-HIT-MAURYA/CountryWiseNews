@@ -91,27 +91,27 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
             Realm realm = Realm.getDefaultInstance();
             RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 0).findAll();
             businessArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
-            businessAdapter = new RecyclerViewAdapter(context, businessArray);
+            businessAdapter = new RecyclerViewAdapter(context, businessArray, false);
 
             realmResults = realm.where(NewsModal.class).equalTo("newsType", 1).findAll();
             entertainmentArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
-            entertainmentAdapter = new RecyclerViewAdapter(context, entertainmentArray);
+            entertainmentAdapter = new RecyclerViewAdapter(context, entertainmentArray, false);
 
             realmResults = realm.where(NewsModal.class).equalTo("newsType", 2).findAll();
             healthArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
-            healthAdapter = new RecyclerViewAdapter(context, healthArray);
+            healthAdapter = new RecyclerViewAdapter(context, healthArray, false);
 
             realmResults = realm.where(NewsModal.class).equalTo("newsType", 3).findAll();
             scienceArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
-            scienceAdapter = new RecyclerViewAdapter(context, scienceArray);
+            scienceAdapter = new RecyclerViewAdapter(context, scienceArray, false);
 
             realmResults = realm.where(NewsModal.class).equalTo("newsType", 4).findAll();
             sportsArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
-            sportsAdapter = new RecyclerViewAdapter(context, sportsArray);
+            sportsAdapter = new RecyclerViewAdapter(context, sportsArray, false);
 
             realmResults = realm.where(NewsModal.class).equalTo("newsType", 5).findAll();
             technologyArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
-            technologyAdapter = new RecyclerViewAdapter(context, technologyArray);
+            technologyAdapter = new RecyclerViewAdapter(context, technologyArray, false);
 
             viewPagerAdapter = new ViewPagerAdapter();
             fragmentCategoryBinding.viewPager.setAdapter(viewPagerAdapter);
@@ -146,42 +146,42 @@ public class CategoryFragment extends Fragment implements TabLayout.OnTabSelecte
             loadData(call, jsonArray -> RealmHelper.storeDataInDb(0, jsonArray, () -> {
                 RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 0).findAll();
                 businessArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
-                businessAdapter = new RecyclerViewAdapter(context, businessArray);
+                businessAdapter = new RecyclerViewAdapter(context, businessArray, false);
             }));
         } else if (entertainmentArray == null) {
             call = apiInterface.getEntertainmentNews();
             loadData(call, jsonArray -> RealmHelper.storeDataInDb(1, jsonArray, () -> {
                 RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 1).findAll();
                 entertainmentArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
-                entertainmentAdapter = new RecyclerViewAdapter(context, entertainmentArray);
+                entertainmentAdapter = new RecyclerViewAdapter(context, entertainmentArray, false);
             }));
         } else if (healthArray == null) {
             call = apiInterface.getHealthNews();
             loadData(call, jsonArray -> RealmHelper.storeDataInDb(2, jsonArray, () -> {
                 RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 2).findAll();
                 healthArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
-                healthAdapter = new RecyclerViewAdapter(context, healthArray);
+                healthAdapter = new RecyclerViewAdapter(context, healthArray, false);
             }));
         } else if (scienceArray == null) {
             call = apiInterface.getScienceNews();
             loadData(call, jsonArray -> RealmHelper.storeDataInDb(3, jsonArray, () -> {
                 RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 3).findAll();
                 scienceArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
-                scienceAdapter = new RecyclerViewAdapter(context, scienceArray);
+                scienceAdapter = new RecyclerViewAdapter(context, scienceArray, false);
             }));
         } else if (sportsArray == null) {
             call = apiInterface.getSportsNews();
             loadData(call, jsonArray -> RealmHelper.storeDataInDb(4, jsonArray, () -> {
                 RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 4).findAll();
                 sportsArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
-                sportsAdapter = new RecyclerViewAdapter(context, sportsArray);
+                sportsAdapter = new RecyclerViewAdapter(context, sportsArray, false);
             }));
         } else if (technologyArray == null) {
             call = apiInterface.getTechnologyNews();
             loadData(call, jsonArray -> RealmHelper.storeDataInDb(5, jsonArray, () -> {
                 RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("newsType", 5).findAll();
                 technologyArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
-                technologyAdapter = new RecyclerViewAdapter(context, technologyArray);
+                technologyAdapter = new RecyclerViewAdapter(context, technologyArray, false);
 
                 ((RotateLoading) dialog.findViewById(R.id.rotateLoading)).stop();
                 dialog.hide();

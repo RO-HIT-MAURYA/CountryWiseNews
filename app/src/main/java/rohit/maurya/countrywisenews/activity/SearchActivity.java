@@ -38,8 +38,10 @@ import rohit.maurya.countrywisenews.modals.NewsModal;
 public class SearchActivity extends AppCompatActivity {
 
     private ActivitySearchBinding activitySearchBinding;
-    private JsonArray masterJsonArray = new JsonArray();
+    public JsonArray masterJsonArray = new JsonArray();
+    public static JsonArray subJsonArray = new JsonArray();
     private SearchView searchView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class SearchActivity extends AppCompatActivity {
         RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).findAll();
         realmResults = realmResults.sort("publishedAt", Sort.DESCENDING);
         masterJsonArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
+        subJsonArray = masterJsonArray;
 
         setAdapter(masterJsonArray);
     }
@@ -68,7 +71,7 @@ public class SearchActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         activitySearchBinding.recyclerView.setLayoutManager(linearLayoutManager);
-        activitySearchBinding.recyclerView.setAdapter(new RecyclerViewAdapter(this, jsonArray));
+        activitySearchBinding.recyclerView.setAdapter(new RecyclerViewAdapter(this, jsonArray, true));
     }
 
     private void setUpToolBar() {
@@ -118,6 +121,7 @@ public class SearchActivity extends AppCompatActivity {
                 jsonArray.add(jsonElement);
         }
 
+        subJsonArray = jsonArray;
         setAdapter(jsonArray);
     }
 

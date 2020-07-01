@@ -22,8 +22,7 @@ import rohit.maurya.countrywisenews.adapters.RecyclerViewAdapter;
 import rohit.maurya.countrywisenews.databinding.FragmentBookmarkBinding;
 import rohit.maurya.countrywisenews.modals.NewsModal;
 
-public class BookMarkFragment extends Fragment
-{
+public class BookMarkFragment extends Fragment {
     private FragmentBookmarkBinding fragmentBookmarkBinding;
     private Context context;
 
@@ -33,11 +32,9 @@ public class BookMarkFragment extends Fragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        if (fragmentBookmarkBinding == null)
-        {
-            fragmentBookmarkBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_bookmark,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (fragmentBookmarkBinding == null) {
+            fragmentBookmarkBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bookmark, container, false);
             context = getContext();
             //setAdapter();
         }
@@ -49,13 +46,13 @@ public class BookMarkFragment extends Fragment
     public void setAdapter() {
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("bookMark",true).findAll();
+        RealmResults<NewsModal> realmResults = realm.where(NewsModal.class).equalTo("bookMark", true).findAll();
         realmResults = realmResults.sort("publishedAt", Sort.DESCENDING);
         JsonArray jsonArray = new JsonParser().parse(realmResults.asJSON()).getAsJsonArray();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         fragmentBookmarkBinding.recyclerView.setLayoutManager(linearLayoutManager);
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(context,jsonArray);
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(context, jsonArray, false);
         fragmentBookmarkBinding.recyclerView.setAdapter(recyclerViewAdapter);
     }
 }
